@@ -4,7 +4,7 @@ server:
 
 logging:
     level:
-        jdbc: debug
+        jdbc: trace
         'se.citerus.dddsample': debug
 
 uploadDirectory: /tmp/upload
@@ -13,9 +13,13 @@ parseFailureDirectory: /tmp/failed
 brokerUrl: "vm://localhost?broker.persistent=false&broker.useJmx=false"
 
 spring:
+    jpa:
+        show-sql: true
+        hibernate:
+            ddl-auto: create-drop
     dataSource:
-        url: jdbc:hsqldb:mem:dddsample
-        username: sa
+        url: jdbc:mysql://127.0.0.1:3306/dddsample
+        username: root
         password: ""
 
 jdbc:
