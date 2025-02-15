@@ -1,17 +1,28 @@
 package se.citerus.dddsample.domain.model.handling;
 
-import jakarta.persistence.*;
-import org.apache.commons.lang3.Validate;
+import java.time.Instant;
+import java.util.Objects;
+
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+import nl.pojoquery.annotations.Link;
 import se.citerus.dddsample.domain.model.cargo.Cargo;
 import se.citerus.dddsample.domain.model.location.Location;
 import se.citerus.dddsample.domain.model.voyage.Voyage;
 import se.citerus.dddsample.domain.shared.DomainEvent;
 import se.citerus.dddsample.domain.shared.ValueObject;
-
-import java.time.Instant;
-import java.util.Objects;
 
 /**
  * A HandlingEvent is used to register the event when, for instance,
@@ -31,20 +42,25 @@ import java.util.Objects;
  */
 @Entity(name = "HandlingEvent")
 @Table(name = "HandlingEvent")
+@nl.pojoquery.annotations.Table("handlingevent")
 public final class HandlingEvent implements DomainEvent<HandlingEvent> {
 
+  @nl.pojoquery.annotations.Id
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
   private long id;
 
+  @Link(linkfield = "voyage_id")
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "voyage_id")
   private Voyage voyage;
 
+  @Link(linkfield = "location_id")
   @ManyToOne(fetch = FetchType.EAGER)
   @JoinColumn(name = "location_id")
   private Location location;
 
+  @Link(linkfield = "cargo_id")
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "cargo_id")
   private Cargo cargo;

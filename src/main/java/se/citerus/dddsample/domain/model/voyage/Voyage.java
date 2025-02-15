@@ -1,6 +1,9 @@
 package se.citerus.dddsample.domain.model.voyage;
 
 import jakarta.persistence.*;
+import nl.pojoquery.annotations.FieldName;
+import nl.pojoquery.annotations.Link;
+
 import org.apache.commons.lang3.Validate;
 import se.citerus.dddsample.domain.model.location.Location;
 import se.citerus.dddsample.domain.shared.DomainEntity;
@@ -15,15 +18,19 @@ import java.util.Objects;
  */
 @Entity(name = "Voyage")
 @Table(name = "Voyage")
+@nl.pojoquery.annotations.Table("voyage")
 public class Voyage implements DomainEntity<Voyage> {
 
+  @nl.pojoquery.annotations.Id
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
-  private long id;
+  private Long id;
 
+  @FieldName("voyage_number")
   @Column(name = "voyage_number", unique = true)
   private String voyageNumber;
 
+  @Link(linkfield = "voyage_id")
   @OneToMany(cascade = CascadeType.ALL)
   @JoinColumn(name = "voyage_id")
   private List<CarrierMovement> carrierMovements;

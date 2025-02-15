@@ -1,6 +1,9 @@
 package se.citerus.dddsample.domain.model.voyage;
 
 import jakarta.persistence.*;
+import nl.pojoquery.annotations.FieldName;
+import nl.pojoquery.annotations.Link;
+
 import org.apache.commons.lang3.Validate;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
@@ -15,23 +18,29 @@ import java.time.Instant;
  */
 @Entity(name = "CarrierMovement")
 @Table(name = "CarrierMovement")
+@nl.pojoquery.annotations.Table("carrier_movement")
 public final class CarrierMovement implements ValueObject<CarrierMovement> {
 
+  @nl.pojoquery.annotations.Id
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
-  private long id;
+  private Long id;
 
+  @Link(linkfield = "arrival_location_id")
   @ManyToOne(fetch = FetchType.EAGER)
   @JoinColumn(name = "arrival_location_id", nullable = false)
   private Location arrivalLocation;
 
+  @Link(linkfield = "departure_location_id")
   @ManyToOne(fetch = FetchType.EAGER)
   @JoinColumn(name = "departure_location_id", nullable = false)
   private Location departureLocation;
 
+  @FieldName("arrival_time")
   @Column(name = "arrival_time", nullable = false)
   private Instant arrivalTime;
 
+  @FieldName("departure_time")
   @Column(name = "departure_time", nullable = false)
   private Instant departureTime;
 

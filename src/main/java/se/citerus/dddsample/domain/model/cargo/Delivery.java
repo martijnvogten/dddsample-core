@@ -1,21 +1,35 @@
 package se.citerus.dddsample.domain.model.cargo;
 
-import jakarta.persistence.*;
-import org.apache.commons.lang3.Validate;
-import org.apache.commons.lang3.builder.EqualsBuilder;
-import org.apache.commons.lang3.builder.HashCodeBuilder;
-import se.citerus.dddsample.domain.model.handling.HandlingEvent;
-import se.citerus.dddsample.domain.model.handling.HandlingHistory;
-import se.citerus.dddsample.domain.model.location.Location;
-import se.citerus.dddsample.domain.model.voyage.Voyage;
-import se.citerus.dddsample.domain.shared.ValueObject;
+import static se.citerus.dddsample.domain.model.cargo.RoutingStatus.MISROUTED;
+import static se.citerus.dddsample.domain.model.cargo.RoutingStatus.NOT_ROUTED;
+import static se.citerus.dddsample.domain.model.cargo.RoutingStatus.ROUTED;
+import static se.citerus.dddsample.domain.model.cargo.TransportStatus.CLAIMED;
+import static se.citerus.dddsample.domain.model.cargo.TransportStatus.IN_PORT;
+import static se.citerus.dddsample.domain.model.cargo.TransportStatus.NOT_RECEIVED;
+import static se.citerus.dddsample.domain.model.cargo.TransportStatus.ONBOARD_CARRIER;
+import static se.citerus.dddsample.domain.model.cargo.TransportStatus.UNKNOWN;
 
 import java.time.Instant;
 import java.util.Iterator;
 import java.util.Objects;
 
-import static se.citerus.dddsample.domain.model.cargo.RoutingStatus.*;
-import static se.citerus.dddsample.domain.model.cargo.TransportStatus.*;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Embeddable;
+import jakarta.persistence.Embedded;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import nl.pojoquery.annotations.FieldName;
+import nl.pojoquery.annotations.Link;
+import se.citerus.dddsample.domain.model.handling.HandlingEvent;
+import se.citerus.dddsample.domain.model.handling.HandlingHistory;
+import se.citerus.dddsample.domain.model.location.Location;
+import se.citerus.dddsample.domain.model.voyage.Voyage;
+import se.citerus.dddsample.domain.shared.ValueObject;
 
 /**
  * The actual transportation of the cargo, as opposed to
@@ -31,31 +45,39 @@ public class Delivery implements ValueObject<Delivery> {
   @Column
   private Instant eta;
 
+  @FieldName("calculated_at")
   @Column(name = "calculated_at")
   private Instant calculatedAt;
 
+  @FieldName("unloaded_at_dest")
   @Column(name = "unloaded_at_dest")
   private boolean isUnloadedAtDestination;
 
+  @FieldName("routing_status")
   @Enumerated(value = EnumType.STRING)
   @Column(name = "routing_status")
   private RoutingStatus routingStatus;
 
+  @nl.pojoquery.annotations.Embedded(prefix = "")
   @Embedded
   private HandlingActivity nextExpectedActivity;
 
+  @FieldName("transport_status")
   @Enumerated(value = EnumType.STRING)
   @Column(name = "transport_status")
   private TransportStatus transportStatus;
 
+  @Link(linkfield = "current_voyage_id")
   @ManyToOne
   @JoinColumn(name = "current_voyage_id")
   private Voyage currentVoyage;
 
+  @Link(linkfield = "last_known_location_id")
   @ManyToOne()
   @JoinColumn(name = "last_known_location_id")
   private Location lastKnownLocation;
 
+  @Link(linkfield = "last_event_id")
   @ManyToOne
   @JoinColumn(name = "last_event_id")
   private HandlingEvent lastEvent;

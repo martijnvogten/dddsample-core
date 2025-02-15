@@ -1,13 +1,25 @@
 package se.citerus.dddsample.domain.model.cargo;
 
-import jakarta.persistence.*;
-import org.apache.commons.lang3.Validate;
+import java.util.List;
+import java.util.Objects;
+
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Embedded;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
+import nl.pojoquery.annotations.FieldName;
+import nl.pojoquery.annotations.Link;
 import se.citerus.dddsample.domain.model.handling.HandlingHistory;
 import se.citerus.dddsample.domain.model.location.Location;
 import se.citerus.dddsample.domain.shared.DomainEntity;
-
-import java.util.List;
-import java.util.Objects;
 
 /**
  * A Cargo. This is the central class in the domain model,
@@ -47,26 +59,33 @@ import java.util.Objects;
  */
 @Entity(name = "Cargo")
 @Table(name = "Cargo")
+@nl.pojoquery.annotations.Table("cargo")
 public class Cargo implements DomainEntity<Cargo> {
 
+  @nl.pojoquery.annotations.Id
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
-  private long id;
+  private Long id;
 
+  @FieldName("tracking_id")
   @Column(name = "tracking_id", unique = true)
   private String trackingId;
 
+  @Link(linkfield = "origin_id")
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "origin_id")
   private Location origin;
 
+  @nl.pojoquery.annotations.Embedded(prefix="")
   @Embedded
   private RouteSpecification routeSpecification;
 
+  @Link(linkfield = "cargo_id")
   @OneToMany(cascade = CascadeType.ALL)
   @JoinColumn(name = "cargo_id")
   private List<Leg> itinerary; // TODO figure out if we can map an Itinerary object instead
 
+  @nl.pojoquery.annotations.Embedded(prefix="")
   @Embedded
   private Delivery delivery;
 

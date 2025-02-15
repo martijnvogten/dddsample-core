@@ -1,15 +1,22 @@
 package se.citerus.dddsample.domain.model.cargo;
 
-import jakarta.persistence.*;
-import org.apache.commons.lang3.Validate;
+import java.util.Objects;
+
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Embeddable;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import nl.pojoquery.annotations.FieldName;
+import nl.pojoquery.annotations.Link;
 import se.citerus.dddsample.domain.model.handling.HandlingEvent;
 import se.citerus.dddsample.domain.model.location.Location;
 import se.citerus.dddsample.domain.model.voyage.Voyage;
 import se.citerus.dddsample.domain.shared.ValueObject;
-
-import java.util.Objects;
 
 /**
  * A handling activity represents how and where a cargo can be handled,
@@ -22,14 +29,17 @@ public class HandlingActivity implements ValueObject<HandlingActivity> {
 
   // TODO make HandlingActivity a part of HandlingEvent too? There is some overlap. 
 
+  @FieldName("next_expected_handling_event_type")
   @Enumerated(value = EnumType.STRING)
   @Column(name = "next_expected_handling_event_type")
   public HandlingEvent.Type type;
 
+  @Link(linkfield="next_expected_location_id")
   @ManyToOne()
   @JoinColumn(name = "next_expected_location_id")
   public Location location;
 
+  @Link(linkfield="next_expected_voyage_id")
   @ManyToOne
   @JoinColumn(name = "next_expected_voyage_id")
   public Voyage voyage;

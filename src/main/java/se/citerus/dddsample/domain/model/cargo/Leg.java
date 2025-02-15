@@ -1,41 +1,58 @@
 package se.citerus.dddsample.domain.model.cargo;
 
-import jakarta.persistence.*;
+import java.time.Instant;
+
 import org.apache.commons.lang3.Validate;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+import nl.pojoquery.annotations.FieldName;
+import nl.pojoquery.annotations.Link;
 import se.citerus.dddsample.domain.model.location.Location;
 import se.citerus.dddsample.domain.model.voyage.Voyage;
 import se.citerus.dddsample.domain.shared.ValueObject;
-
-import java.time.Instant;
 
 /**
  * An itinerary consists of one or more legs.
  */
 @Entity(name = "Leg")
 @Table(name = "Leg")
+@nl.pojoquery.annotations.Table("leg")
 public class Leg implements ValueObject<Leg> {
 
+  @nl.pojoquery.annotations.Id
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
-  private long id;
+  private Long id;
 
+  @Link(linkfield = "voyage_id")
   @ManyToOne
   @JoinColumn(name="voyage_id")
   private Voyage voyage;
 
+  @Link(linkfield = "load_location_id")
   @ManyToOne
   @JoinColumn(name = "load_location_id")
   private Location loadLocation;
 
+  @FieldName("load_time")
   @Column(name = "load_time")
   private Instant loadTime;
 
+  @Link(linkfield = "unload_location_id")
   @ManyToOne
   @JoinColumn(name = "unload_location_id")
   private Location unloadLocation;
 
+  @FieldName("unload_time")
   @Column(name = "unload_time")
   private Instant unloadTime;
 

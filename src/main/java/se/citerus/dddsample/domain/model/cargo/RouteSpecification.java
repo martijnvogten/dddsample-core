@@ -1,18 +1,21 @@
 package se.citerus.dddsample.domain.model.cargo;
 
+import java.time.Instant;
+import java.util.Objects;
+
+import org.apache.commons.lang3.Validate;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import org.apache.commons.lang3.Validate;
-import org.apache.commons.lang3.builder.EqualsBuilder;
-import org.apache.commons.lang3.builder.HashCodeBuilder;
+import nl.pojoquery.annotations.FieldName;
+import nl.pojoquery.annotations.Link;
 import se.citerus.dddsample.domain.model.location.Location;
 import se.citerus.dddsample.domain.shared.AbstractSpecification;
 import se.citerus.dddsample.domain.shared.ValueObject;
-
-import java.time.Instant;
-import java.util.Objects;
 
 /**
  * Route specification. Describes where a cargo origin and destination is,
@@ -22,14 +25,17 @@ import java.util.Objects;
 @Embeddable
 public class RouteSpecification extends AbstractSpecification<Itinerary> implements ValueObject<RouteSpecification> {
 
+  @Link(linkfield = "spec_origin_id")
   @ManyToOne()
   @JoinColumn(name = "spec_origin_id")
   private Location origin;
 
+  @Link(linkfield = "spec_destination_id")
   @ManyToOne()
   @JoinColumn(name = "spec_destination_id")
   private Location destination;
 
+  @FieldName("spec_arrival_deadline")
   @Column(name = "spec_arrival_deadline", nullable = false)
   private Instant arrivalDeadline;
 

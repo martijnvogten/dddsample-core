@@ -14,11 +14,13 @@ import java.util.Objects;
  */
 @Entity(name = "Location")
 @Table(name = "Location")
+@nl.pojoquery.annotations.Table("location")
 public final class Location implements DomainEntity<Location> {
 
+  @nl.pojoquery.annotations.Id
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
-  private long id;
+  private Long id;
 
   @Column(nullable = false, unique = true, updatable = false)
   private String unlocode;

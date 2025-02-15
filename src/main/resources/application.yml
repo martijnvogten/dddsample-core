@@ -16,7 +16,7 @@ spring:
     jpa:
         show-sql: true
         hibernate:
-            ddl-auto: create-drop
+            ddl-auto: none
     dataSource:
         url: jdbc:mysql://127.0.0.1:3306/dddsample
         username: root
