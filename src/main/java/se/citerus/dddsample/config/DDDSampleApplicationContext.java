@@ -8,6 +8,7 @@ import org.springframework.transaction.PlatformTransactionManager;
 
 import com.pathfinder.api.GraphTraversalService;
 
+import jakarta.persistence.EntityManager;
 import nl.pojoquery.DbContext;
 import se.citerus.dddsample.application.ApplicationEvents;
 import se.citerus.dddsample.application.BookingService;
@@ -48,6 +49,9 @@ public class DDDSampleApplicationContext {
 	
 	@Autowired
 	private ApplicationEvents applicationEvents;
+	
+	@Autowired
+	private EntityManager entityManager;
 	
 	@Bean
     public LocationRepository locationRepository() {
@@ -99,6 +103,11 @@ public class DDDSampleApplicationContext {
         return new ExternalRoutingService(graphTraversalService, locationRepository(), voyageRepository());
     }
 
+    @Bean
+    public ResetDatabaseBean resetDatabaseBean() {
+      return new ResetDatabaseBean();
+    }
+    
     @Bean
     public SampleDataGenerator sampleDataGenerator(CargoRepository cargoRepository,
                                                    VoyageRepository voyageRepository,
