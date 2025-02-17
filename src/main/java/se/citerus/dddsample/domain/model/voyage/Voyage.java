@@ -16,7 +16,7 @@ import java.util.Objects;
 /**
  * A Voyage.
  */
-@Entity(name = "Voyage")
+// @Entity(name = "Voyage")
 @Table(name = "Voyage")
 @nl.pojoquery.annotations.Table("voyage")
 public class Voyage implements DomainEntity<Voyage> {
@@ -30,7 +30,7 @@ public class Voyage implements DomainEntity<Voyage> {
   @Column(name = "voyage_number", unique = true)
   private String voyageNumber;
 
-  @Link(linkfield = "voyage_id")
+  @Link(foreignlinkfield = "voyage_id")
   @OneToMany(cascade = CascadeType.ALL)
   @JoinColumn(name = "voyage_id")
   private List<CarrierMovement> carrierMovements;
@@ -92,6 +92,9 @@ public class Voyage implements DomainEntity<Voyage> {
   }
 
 
+  public Long id() {
+    return id;
+  }
 
   /**
    * Builder pattern is used for incremental construction

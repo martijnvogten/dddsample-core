@@ -50,9 +50,9 @@ public class HandlingEventFactory {
 
     try {
       if (voyage == null) {
-        return new HandlingEvent(cargo, completionTime, registrationTime, type, location);
+        return new HandlingEvent(cargo.getRef(), completionTime, registrationTime, type, location);
       } else {
-        return new HandlingEvent(cargo, completionTime, registrationTime, type, location, voyage);
+        return new HandlingEvent(cargo.getRef(), completionTime, registrationTime, type, location, voyage);
       }
     } catch (Exception e) {
       throw new CannotCreateHandlingEventException(e);

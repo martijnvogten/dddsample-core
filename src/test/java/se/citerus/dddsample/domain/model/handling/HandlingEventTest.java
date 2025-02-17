@@ -29,16 +29,16 @@ public class HandlingEventTest {
   @Test
   public void testNewWithCarrierMovement() {
 
-    HandlingEvent e1 = new HandlingEvent(cargo, Instant.now(), Instant.now(), LOAD, HONGKONG, CM003);
+    HandlingEvent e1 = new HandlingEvent(cargo.getRef(), Instant.now(), Instant.now(), LOAD, HONGKONG, CM003);
     assertThat(e1.location()).isEqualTo(HONGKONG);
 
-    HandlingEvent e2 = new HandlingEvent(cargo, Instant.now(), Instant.now(), UNLOAD, NEWYORK, CM003);
+    HandlingEvent e2 = new HandlingEvent(cargo.getRef(), Instant.now(), Instant.now(), UNLOAD, NEWYORK, CM003);
     assertThat(e2.location()).isEqualTo(NEWYORK);
 
       // These event types prohibit a carrier movement association
     for (HandlingEvent.Type type : List.of(CLAIM, RECEIVE, CUSTOMS)) {
       try {
-        new HandlingEvent(cargo, Instant.now(), Instant.now(), type, HONGKONG, CM003);
+        new HandlingEvent(cargo.getRef(), Instant.now(), Instant.now(), type, HONGKONG, CM003);
         fail("Handling event type " + type + " prohibits carrier movement");
       } catch (IllegalArgumentException expected) {}
     }
@@ -46,7 +46,7 @@ public class HandlingEventTest {
       // These event types requires a carrier movement association
     for (HandlingEvent.Type type : List.of(LOAD, UNLOAD)) {
         try {
-          new HandlingEvent(cargo, Instant.now(), Instant.now(), type, HONGKONG, null);
+          new HandlingEvent(cargo.getRef(), Instant.now(), Instant.now(), type, HONGKONG, null);
             fail("Handling event type " + type + " requires carrier movement");
         } catch (NullPointerException expected) {}
     }
@@ -54,35 +54,35 @@ public class HandlingEventTest {
 
   @Test
   public void testNewWithLocation() {
-    HandlingEvent e1 = new HandlingEvent(cargo, Instant.now(), Instant.now(), HandlingEvent.Type.CLAIM, HELSINKI);
+    HandlingEvent e1 = new HandlingEvent(cargo.getRef(), Instant.now(), Instant.now(), HandlingEvent.Type.CLAIM, HELSINKI);
     assertThat(e1.location()).isEqualTo(HELSINKI);
   }
 
   @Test
   public void testCurrentLocationLoadEvent() {
 
-    HandlingEvent ev = new HandlingEvent(cargo, Instant.now(), Instant.now(), LOAD, CHICAGO, CM004);
+    HandlingEvent ev = new HandlingEvent(cargo.getRef(), Instant.now(), Instant.now(), LOAD, CHICAGO, CM004);
     
     assertThat(ev.location()).isEqualTo(CHICAGO);
   }
 
   @Test
   public void testCurrentLocationUnloadEvent() {
-    HandlingEvent ev = new HandlingEvent(cargo, Instant.now(), Instant.now(), UNLOAD, HAMBURG, CM004);
+    HandlingEvent ev = new HandlingEvent(cargo.getRef(), Instant.now(), Instant.now(), UNLOAD, HAMBURG, CM004);
     
     assertThat(ev.location()).isEqualTo(HAMBURG);
   }
 
   @Test
   public void testCurrentLocationReceivedEvent() {
-    HandlingEvent ev = new HandlingEvent(cargo, Instant.now(), Instant.now(), RECEIVE, CHICAGO);
+    HandlingEvent ev = new HandlingEvent(cargo.getRef(), Instant.now(), Instant.now(), RECEIVE, CHICAGO);
 
     assertThat(ev.location()).isEqualTo(CHICAGO);
   }
 
   @Test
   public void testCurrentLocationClaimedEvent() {
-    HandlingEvent ev = new HandlingEvent(cargo, Instant.now(), Instant.now(), CLAIM, CHICAGO);
+    HandlingEvent ev = new HandlingEvent(cargo.getRef(), Instant.now(), Instant.now(), CLAIM, CHICAGO);
 
     assertThat(ev.location()).isEqualTo(CHICAGO);
   }
@@ -110,8 +110,8 @@ public class HandlingEventTest {
     Instant timeOccured = Instant.now();
     Instant timeRegistered = Instant.now();
 
-    HandlingEvent ev1 = new HandlingEvent(cargo, timeOccured, timeRegistered, LOAD, CHICAGO, CM005);
-    HandlingEvent ev2 = new HandlingEvent(cargo, timeOccured, timeRegistered, LOAD, CHICAGO, CM005);
+    HandlingEvent ev1 = new HandlingEvent(cargo.getRef(), timeOccured, timeRegistered, LOAD, CHICAGO, CM005);
+    HandlingEvent ev2 = new HandlingEvent(cargo.getRef(), timeOccured, timeRegistered, LOAD, CHICAGO, CM005);
 
     // Two handling events are not equal() even if all non-uuid fields are identical
     assertThat(ev1.equals(ev2)).isTrue();

@@ -51,41 +51,41 @@ public class ItineraryTest {
     );
 
     //Happy path
-    HandlingEvent event = new HandlingEvent(cargo, Instant.now(), Instant.now(), HandlingEvent.Type.RECEIVE, SHANGHAI);
+    HandlingEvent event = new HandlingEvent(cargo.getRef(), Instant.now(), Instant.now(), HandlingEvent.Type.RECEIVE, SHANGHAI);
     assertThat(itinerary.isExpected(event)).isTrue();
 
-    event = new HandlingEvent(cargo, Instant.now(), Instant.now(), HandlingEvent.Type.LOAD, SHANGHAI, voyage);
+    event = new HandlingEvent(cargo.getRef(), Instant.now(), Instant.now(), HandlingEvent.Type.LOAD, SHANGHAI, voyage);
     assertThat(itinerary.isExpected(event)).isTrue();
 
-    event = new HandlingEvent(cargo, Instant.now(), Instant.now(), HandlingEvent.Type.UNLOAD, ROTTERDAM, voyage);
+    event = new HandlingEvent(cargo.getRef(), Instant.now(), Instant.now(), HandlingEvent.Type.UNLOAD, ROTTERDAM, voyage);
     assertThat(itinerary.isExpected(event)).isTrue();
 
-    event = new HandlingEvent(cargo, Instant.now(), Instant.now(), HandlingEvent.Type.LOAD, ROTTERDAM, voyage);
+    event = new HandlingEvent(cargo.getRef(), Instant.now(), Instant.now(), HandlingEvent.Type.LOAD, ROTTERDAM, voyage);
     assertThat(itinerary.isExpected(event)).isTrue();
 
-    event = new HandlingEvent(cargo, Instant.now(), Instant.now(), HandlingEvent.Type.UNLOAD, GOTHENBURG, voyage);
+    event = new HandlingEvent(cargo.getRef(), Instant.now(), Instant.now(), HandlingEvent.Type.UNLOAD, GOTHENBURG, voyage);
     assertThat(itinerary.isExpected(event)).isTrue();
 
-    event = new HandlingEvent(cargo, Instant.now(), Instant.now(), HandlingEvent.Type.CLAIM, GOTHENBURG);
+    event = new HandlingEvent(cargo.getRef(), Instant.now(), Instant.now(), HandlingEvent.Type.CLAIM, GOTHENBURG);
     assertThat(itinerary.isExpected(event)).isTrue();
 
     //Customs event changes nothing
-    event = new HandlingEvent(cargo, Instant.now(), Instant.now(), HandlingEvent.Type.CUSTOMS, GOTHENBURG);
+    event = new HandlingEvent(cargo.getRef(), Instant.now(), Instant.now(), HandlingEvent.Type.CUSTOMS, GOTHENBURG);
     assertThat(itinerary.isExpected(event)).isTrue();
 
     //Received at the wrong location
-    event = new HandlingEvent(cargo, Instant.now(), Instant.now(), HandlingEvent.Type.RECEIVE, HANGZHOU);
+    event = new HandlingEvent(cargo.getRef(), Instant.now(), Instant.now(), HandlingEvent.Type.RECEIVE, HANGZHOU);
     assertThat(itinerary.isExpected(event)).isFalse();
 
     //Loaded to onto the wrong ship, correct location
-    event = new HandlingEvent(cargo, Instant.now(), Instant.now(), HandlingEvent.Type.LOAD, ROTTERDAM, wrongVoyage);
+    event = new HandlingEvent(cargo.getRef(), Instant.now(), Instant.now(), HandlingEvent.Type.LOAD, ROTTERDAM, wrongVoyage);
     assertThat(itinerary.isExpected(event)).isFalse();
 
     //Unloaded from the wrong ship in the wrong location
-    event = new HandlingEvent(cargo, Instant.now(), Instant.now(), HandlingEvent.Type.UNLOAD, HELSINKI, wrongVoyage);
+    event = new HandlingEvent(cargo.getRef(), Instant.now(), Instant.now(), HandlingEvent.Type.UNLOAD, HELSINKI, wrongVoyage);
     assertThat(itinerary.isExpected(event)).isFalse();
 
-    event = new HandlingEvent(cargo, Instant.now(), Instant.now(), HandlingEvent.Type.CLAIM, ROTTERDAM);
+    event = new HandlingEvent(cargo.getRef(), Instant.now(), Instant.now(), HandlingEvent.Type.CLAIM, ROTTERDAM);
     assertThat(itinerary.isExpected(event)).isFalse();
 
   }

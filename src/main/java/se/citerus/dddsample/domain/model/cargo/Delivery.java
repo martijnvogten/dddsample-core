@@ -68,16 +68,19 @@ public class Delivery implements ValueObject<Delivery> {
   private TransportStatus transportStatus;
 
   @Link(linkfield = "current_voyage_id")
+  @FieldName("current_voyage_id")
   @ManyToOne
   @JoinColumn(name = "current_voyage_id")
   private Voyage currentVoyage;
 
   @Link(linkfield = "last_known_location_id")
+  @FieldName("last_known_location_id")
   @ManyToOne()
   @JoinColumn(name = "last_known_location_id")
   private Location lastKnownLocation;
 
   @Link(linkfield = "last_event_id")
+  @FieldName("last_event_id")
   @ManyToOne
   @JoinColumn(name = "last_event_id")
   private HandlingEvent lastEvent;

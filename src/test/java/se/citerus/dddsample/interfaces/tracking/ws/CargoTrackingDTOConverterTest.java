@@ -85,8 +85,8 @@ class CargoTrackingDTOConverterTest {
         Voyage voyage = new Voyage(new VoyageNumber("0101"), new Schedule(Collections.singletonList(
                 new CarrierMovement(origin, dest, Instant.now(), Instant.now()))));
         List<HandlingEvent> events = Arrays.asList(
-                new HandlingEvent(cargo, Instant.now(), Instant.now(), HandlingEvent.Type.RECEIVE, origin),
-                new HandlingEvent(cargo, Instant.now(), Instant.now(), HandlingEvent.Type.LOAD, origin, voyage));
+                new HandlingEvent(cargo.getRef(), Instant.now(), Instant.now(), HandlingEvent.Type.RECEIVE, origin),
+                new HandlingEvent(cargo.getRef(), Instant.now(), Instant.now(), HandlingEvent.Type.LOAD, origin, voyage));
         CargoTrackingDTO result = CargoTrackingDTOConverter.convert(cargo, events, mockMsgSrc, Locale.ENGLISH);
 
         assertThat(result).extracting("trackingId", "statusText", "destination", "nextExpectedActivity", "isMisdirected")
@@ -105,7 +105,7 @@ class CargoTrackingDTOConverterTest {
     void shouldConvertDescriptionCorrectlyForGivenParamsWithVoyage(String eventType, String expectedOutput) throws IOException {
         Voyage voyage = exampleVoyage();
         Instant date = Instant.parse("2022-11-01T13:37").atZone(ZoneOffset.UTC).toInstant();
-        HandlingEvent event = new HandlingEvent(exampleCargo(), date, date,
+        HandlingEvent event = new HandlingEvent(exampleCargo().getRef(), date, date,
                 HandlingEvent.Type.valueOf(eventType), exampleLocation, voyage);
 
         String description = CargoTrackingDTOConverter.convertDescription(event, messageSource, Locale.ENGLISH);
@@ -118,7 +118,7 @@ class CargoTrackingDTOConverterTest {
     @ParameterizedTest
     void shouldConvertDescriptionCorrectlyForGivenParamsWithoutVoyage(String eventType, String expectedOutput) throws IOException {
         Instant date = Instant.parse("2022-11-01T13:37").atZone(ZoneOffset.UTC).toInstant();
-        HandlingEvent event = new HandlingEvent(exampleCargo(), date, date,
+        HandlingEvent event = new HandlingEvent(exampleCargo().getRef(), date, date,
                 HandlingEvent.Type.valueOf(eventType), exampleLocation);
 
         String description = CargoTrackingDTOConverter.convertDescription(event, messageSource, Locale.ENGLISH);
@@ -160,7 +160,7 @@ class CargoTrackingDTOConverterTest {
         private Cargo createHandlingEvent(HandlingEvent.Type eventType) {
             Cargo cargo = exampleCargo();
             Location origin = new Location(new UnLocode("SESTO"), "Stockholm");
-            HandlingEvent handlingEvent = new HandlingEvent(cargo, Instant.now(), Instant.now(), eventType, origin);
+            HandlingEvent handlingEvent = new HandlingEvent(cargo.getRef(), Instant.now(), Instant.now(), eventType, origin);
             cargo.deriveDeliveryProgress(new HandlingHistory(singletonList(handlingEvent)));
             return cargo;
         }
@@ -168,7 +168,7 @@ class CargoTrackingDTOConverterTest {
         private Cargo createHandlingEvent(HandlingEvent.Type eventType, Voyage voyage) {
             Cargo cargo = exampleCargo();
             Location origin = new Location(new UnLocode("SESTO"), "Stockholm");
-            HandlingEvent handlingEvent = new HandlingEvent(cargo, Instant.now(), Instant.now(), eventType, origin, voyage);
+            HandlingEvent handlingEvent = new HandlingEvent(cargo.getRef(), Instant.now(), Instant.now(), eventType, origin, voyage);
             cargo.deriveDeliveryProgress(new HandlingHistory(singletonList(handlingEvent)));
             return cargo;
         }

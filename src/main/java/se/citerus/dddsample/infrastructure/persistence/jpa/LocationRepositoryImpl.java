@@ -2,8 +2,6 @@ package se.citerus.dddsample.infrastructure.persistence.jpa;
 
 import java.util.List;
 
-import javax.sql.DataSource;
-
 import org.springframework.beans.factory.annotation.Autowired;
 
 import nl.pojoquery.PojoQuery;
@@ -12,26 +10,30 @@ import se.citerus.dddsample.domain.model.location.LocationRepository;
 import se.citerus.dddsample.domain.model.location.UnLocode;
 
 public class LocationRepositoryImpl implements LocationRepository {
-	
-	@Autowired
-	DataSource db;
 
-	@Override
-	public Location find(UnLocode unLocode) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+  @Autowired
+  private CargoDatabase db;
 
-	@Override
-	public List<Location> getAll() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+  @Override
+  public Location find(UnLocode unLocode) {
+    return db.doWork((conn) -> { 
+      List<Location> results = PojoQuery.build(Location.class)
+          .addWhere("{this}.unlocode = ?", unLocode.idString()).execute(conn);
+      return results.size() > 0 ? results.get(0) : null;
+    });
+  }
 
-	@Override
-	public Location store(Location location) {
-		PojoQuery.insert(db, location);
-		return location;
-	}
+  @Override
+  public List<Location> getAll() {
+    return db.doWork(conn -> PojoQuery.build(Location.class).execute(conn));
+  }
+
+  @Override
+  public Location store(Location location) {
+    return db.doWork(conn -> {
+      PojoQuery.insert(conn, location);
+      return location;
+    });
+  }
 
 }

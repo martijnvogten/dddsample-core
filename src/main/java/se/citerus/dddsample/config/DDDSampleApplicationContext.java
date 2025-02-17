@@ -8,7 +8,6 @@ import org.springframework.transaction.PlatformTransactionManager;
 
 import com.pathfinder.api.GraphTraversalService;
 
-import jakarta.persistence.EntityManager;
 import nl.pojoquery.DbContext;
 import se.citerus.dddsample.application.ApplicationEvents;
 import se.citerus.dddsample.application.BookingService;
@@ -25,6 +24,7 @@ import se.citerus.dddsample.domain.model.location.LocationRepository;
 import se.citerus.dddsample.domain.model.voyage.VoyageRepository;
 import se.citerus.dddsample.domain.service.RoutingService;
 import se.citerus.dddsample.infrastructure.messaging.jms.InfrastructureMessagingJmsConfig;
+import se.citerus.dddsample.infrastructure.persistence.jpa.CargoDatabase;
 import se.citerus.dddsample.infrastructure.persistence.jpa.CargoRepositoryImpl;
 import se.citerus.dddsample.infrastructure.persistence.jpa.HandlingEventRepositoryImpl;
 import se.citerus.dddsample.infrastructure.persistence.jpa.LocationRepositoryImpl;
@@ -50,8 +50,10 @@ public class DDDSampleApplicationContext {
 	@Autowired
 	private ApplicationEvents applicationEvents;
 	
-	@Autowired
-	private EntityManager entityManager;
+	@Bean
+	public CargoDatabase cargoDatabase() {
+	  return new CargoDatabase();
+	}
 	
 	@Bean
     public LocationRepository locationRepository() {

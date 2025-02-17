@@ -49,7 +49,7 @@ public class HandlingEventRepositoryTest {
         Cargo cargo = cargoRepository.find(new TrackingId("ABC123"));
         Instant completionTime = Instant.ofEpochMilli(10);
         Instant registrationTime = Instant.ofEpochMilli(20);
-        HandlingEvent event = new HandlingEvent(cargo, completionTime, registrationTime, HandlingEvent.Type.CLAIM, location);
+        HandlingEvent event = new HandlingEvent(cargo.getRef(), completionTime, registrationTime, HandlingEvent.Type.CLAIM, location);
 
         handlingEventRepository.store(event);
 

@@ -23,10 +23,10 @@ public class CargoTrackingViewAdapterTest {
     Cargo cargo = new Cargo(new TrackingId("XYZ"), new RouteSpecification(HANGZHOU, HELSINKI, Instant.now()));
 
     List<HandlingEvent> events = new ArrayList<HandlingEvent>();
-    events.add(new HandlingEvent(cargo, Instant.ofEpochMilli(1), Instant.ofEpochMilli(2), HandlingEvent.Type.RECEIVE, HANGZHOU));
+    events.add(new HandlingEvent(cargo.getRef(), Instant.ofEpochMilli(1), Instant.ofEpochMilli(2), HandlingEvent.Type.RECEIVE, HANGZHOU));
 
-    events.add(new HandlingEvent(cargo, Instant.ofEpochMilli(3), Instant.ofEpochMilli(4), HandlingEvent.Type.LOAD, HANGZHOU, CM001));
-    events.add(new HandlingEvent(cargo, Instant.ofEpochMilli(5), Instant.ofEpochMilli(6), HandlingEvent.Type.UNLOAD, HELSINKI, CM001));
+    events.add(new HandlingEvent(cargo.getRef(), Instant.ofEpochMilli(3), Instant.ofEpochMilli(4), HandlingEvent.Type.LOAD, HANGZHOU, CM001));
+    events.add(new HandlingEvent(cargo.getRef(), Instant.ofEpochMilli(5), Instant.ofEpochMilli(6), HandlingEvent.Type.UNLOAD, HELSINKI, CM001));
 
     cargo.deriveDeliveryProgress(new HandlingHistory(events));
 

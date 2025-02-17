@@ -35,11 +35,13 @@ public class HandlingActivity implements ValueObject<HandlingActivity> {
   public HandlingEvent.Type type;
 
   @Link(linkfield="next_expected_location_id")
+  @FieldName("next_expected_location_id")
   @ManyToOne()
   @JoinColumn(name = "next_expected_location_id")
   public Location location;
 
   @Link(linkfield="next_expected_voyage_id")
+  @FieldName("next_expected_voyage_id")
   @ManyToOne
   @JoinColumn(name = "next_expected_voyage_id")
   public Voyage voyage;

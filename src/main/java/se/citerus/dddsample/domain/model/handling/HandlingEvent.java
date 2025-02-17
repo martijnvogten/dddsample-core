@@ -7,7 +7,6 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
@@ -17,8 +16,9 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import nl.pojoquery.annotations.FieldName;
 import nl.pojoquery.annotations.Link;
-import se.citerus.dddsample.domain.model.cargo.Cargo;
+import se.citerus.dddsample.domain.model.cargo.Cargo.CargoRef;
 import se.citerus.dddsample.domain.model.location.Location;
 import se.citerus.dddsample.domain.model.voyage.Voyage;
 import se.citerus.dddsample.domain.shared.DomainEvent;
@@ -40,15 +40,15 @@ import se.citerus.dddsample.domain.shared.ValueObject;
  * <p/>
  * All other events must be of {@link Type#RECEIVE}, {@link Type#CLAIM} or {@link Type#CUSTOMS}.
  */
-@Entity(name = "HandlingEvent")
+// @Entity(name = "HandlingEvent")
 @Table(name = "HandlingEvent")
-@nl.pojoquery.annotations.Table("handlingevent")
+@nl.pojoquery.annotations.Table("handling_event")
 public final class HandlingEvent implements DomainEvent<HandlingEvent> {
 
   @nl.pojoquery.annotations.Id
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
-  private long id;
+  private Long id;
 
   @Link(linkfield = "voyage_id")
   @ManyToOne(fetch = FetchType.LAZY)
@@ -63,11 +63,13 @@ public final class HandlingEvent implements DomainEvent<HandlingEvent> {
   @Link(linkfield = "cargo_id")
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "cargo_id")
-  private Cargo cargo;
+  private CargoRef cargo;
 
+  @FieldName("completion_time")
   @Column
   private Instant completionTime;
 
+  @FieldName("registration_time")
   @Column
   private Instant registrationTime;
 
@@ -126,7 +128,7 @@ public final class HandlingEvent implements DomainEvent<HandlingEvent> {
    * @param location         where the event took place
    * @param voyage           the voyage
    */
-  public HandlingEvent(final Cargo cargo,
+  public HandlingEvent(final CargoRef cargo,
                        final Instant completionTime,
                        final Instant registrationTime,
                        final Type type,
@@ -158,7 +160,7 @@ public final class HandlingEvent implements DomainEvent<HandlingEvent> {
    * @param type             type of event
    * @param location         where the event took place
    */
-  public HandlingEvent(final Cargo cargo,
+  public HandlingEvent(final CargoRef cargo,
                        final Instant completionTime,
                        final Instant registrationTime,
                        final Type type,
@@ -201,7 +203,7 @@ public final class HandlingEvent implements DomainEvent<HandlingEvent> {
     return this.location;
   }
 
-  public Cargo cargo() {
+  public CargoRef cargo() {
     return this.cargo;
   }
 

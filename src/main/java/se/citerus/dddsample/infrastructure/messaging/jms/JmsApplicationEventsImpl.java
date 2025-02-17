@@ -1,15 +1,17 @@
 package se.citerus.dddsample.infrastructure.messaging.jms;
 
-import jakarta.jms.Destination;
+import java.lang.invoke.MethodHandles;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.jms.core.JmsOperations;
+
+import jakarta.jms.Destination;
 import se.citerus.dddsample.application.ApplicationEvents;
 import se.citerus.dddsample.domain.model.cargo.Cargo;
+import se.citerus.dddsample.domain.model.cargo.Cargo.CargoRef;
 import se.citerus.dddsample.domain.model.handling.HandlingEvent;
 import se.citerus.dddsample.interfaces.handling.HandlingEventRegistrationAttempt;
-
-import java.lang.invoke.MethodHandles;
 
 /**
  * JMS based implementation.
@@ -35,7 +37,7 @@ public final class JmsApplicationEventsImpl implements ApplicationEvents {
 
   @Override
   public void cargoWasHandled(final HandlingEvent event) {
-    final Cargo cargo = event.cargo();
+    final CargoRef cargo = event.cargo();
     logger.info("Cargo was handled {}", cargo);
     jmsOperations.send(cargoHandledQueue, session -> session.createTextMessage(cargo.trackingId().idString()));
   }

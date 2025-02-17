@@ -12,7 +12,7 @@ import java.util.Objects;
  * It is uniquely identified by a UN Locode.
  *
  */
-@Entity(name = "Location")
+// @Entity(name = "Location")
 @Table(name = "Location")
 @nl.pojoquery.annotations.Table("location")
 public final class Location implements DomainEntity<Location> {

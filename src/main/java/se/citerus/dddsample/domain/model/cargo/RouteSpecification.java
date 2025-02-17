@@ -26,11 +26,13 @@ import se.citerus.dddsample.domain.shared.ValueObject;
 public class RouteSpecification extends AbstractSpecification<Itinerary> implements ValueObject<RouteSpecification> {
 
   @Link(linkfield = "spec_origin_id")
+  @FieldName("spec_origin_id")
   @ManyToOne()
   @JoinColumn(name = "spec_origin_id")
   private Location origin;
 
   @Link(linkfield = "spec_destination_id")
+  @FieldName("spec_destination_id")
   @ManyToOne()
   @JoinColumn(name = "spec_destination_id")
   private Location destination;

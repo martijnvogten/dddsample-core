@@ -1,7 +1,5 @@
 package se.citerus.dddsample.infrastructure.persistence.jpa;
 
-import javax.sql.DataSource;
-
 import org.springframework.beans.factory.annotation.Autowired;
 
 import nl.pojoquery.PojoQuery;
@@ -13,16 +11,22 @@ import se.citerus.dddsample.domain.model.handling.HandlingHistory;
 public class HandlingEventRepositoryImpl implements HandlingEventRepository {
 	
 	@Autowired
-	DataSource db;
+	CargoDatabase db;
 
 	@Override
 	public void store(HandlingEvent event) {
-		PojoQuery.insert(db, event);
+	  db.doWork(conn -> {
+	    return PojoQuery.insert(conn, event);
+	  });
 	}
 
 	@Override
+	//   @Query("select he from HandlingEvent he where he.cargo.trackingId = :trackingId and he.location is not NULL")
 	public HandlingHistory lookupHandlingHistoryOfCargo(TrackingId trackingId) {
-		// TODO Auto-generated method stub
-		return null;
+		return new HandlingHistory(db.doWork(conn -> PojoQuery.build(HandlingEvent.class)
+		    .addWhere("cargo.tracking_id = ?", trackingId.idString())
+		    .addWhere("location.id IS NOT NULL")
+		    .execute(conn)
+		));
 	}
 }

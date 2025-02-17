@@ -137,7 +137,7 @@ public class CargoTest {
 
     // Adding an event unrelated to unloading at final destination
     events.add(
-      new HandlingEvent(cargo, Instant.ofEpochMilli(10), Instant.now(), HandlingEvent.Type.RECEIVE, HANGZHOU));
+      new HandlingEvent(cargo.getRef(), Instant.ofEpochMilli(10), Instant.now(), HandlingEvent.Type.RECEIVE, HANGZHOU));
     cargo.deriveDeliveryProgress(new HandlingHistory(events));
     assertThat(cargo.delivery().isUnloadedAtDestination()).isFalse();
 
@@ -147,19 +147,19 @@ public class CargoTest {
 
     // Adding an unload event, but not at the final destination
     events.add(
-      new HandlingEvent(cargo, Instant.ofEpochSecond(20), Instant.now(), HandlingEvent.Type.UNLOAD, TOKYO, voyage));
+      new HandlingEvent(cargo.getRef(), Instant.ofEpochSecond(20), Instant.now(), HandlingEvent.Type.UNLOAD, TOKYO, voyage));
     cargo.deriveDeliveryProgress(new HandlingHistory(events));
     assertThat(cargo.delivery().isUnloadedAtDestination()).isFalse();
 
     // Adding an event in the final destination, but not unload
     events.add(
-      new HandlingEvent(cargo, Instant.ofEpochSecond(30), Instant.now(), HandlingEvent.Type.CUSTOMS, NEWYORK));
+      new HandlingEvent(cargo.getRef(), Instant.ofEpochSecond(30), Instant.now(), HandlingEvent.Type.CUSTOMS, NEWYORK));
     cargo.deriveDeliveryProgress(new HandlingHistory(events));
     assertThat(cargo.delivery().isUnloadedAtDestination()).isFalse();
 
     // Finally, cargo is unloaded at final destination
     events.add(
-      new HandlingEvent(cargo, Instant.ofEpochSecond(40), Instant.now(), HandlingEvent.Type.UNLOAD, NEWYORK, voyage));
+      new HandlingEvent(cargo.getRef(), Instant.ofEpochSecond(40), Instant.now(), HandlingEvent.Type.UNLOAD, NEWYORK, voyage));
     cargo.deriveDeliveryProgress(new HandlingHistory(events));
     assertThat(cargo.delivery().isUnloadedAtDestination()).isTrue();
   }
@@ -168,7 +168,7 @@ public class CargoTest {
   private Cargo populateCargoReceivedStockholm() throws Exception {
     final Cargo cargo = new Cargo(new TrackingId("XYZ"), new RouteSpecification(STOCKHOLM, MELBOURNE, Instant.now()));
 
-    HandlingEvent he = new HandlingEvent(cargo, getDate("2007-12-01"), Instant.now(), HandlingEvent.Type.RECEIVE, STOCKHOLM);
+    HandlingEvent he = new HandlingEvent(cargo.getRef(), getDate("2007-12-01"), Instant.now(), HandlingEvent.Type.RECEIVE, STOCKHOLM);
     events.add(he);
     cargo.deriveDeliveryProgress(new HandlingHistory(events));
 
@@ -178,7 +178,7 @@ public class CargoTest {
   private Cargo populateCargoClaimedMelbourne() throws Exception {
     final Cargo cargo = populateCargoOffMelbourne();
 
-    events.add(new HandlingEvent(cargo, getDate("2007-12-09"), Instant.now(), HandlingEvent.Type.CLAIM, MELBOURNE));
+    events.add(new HandlingEvent(cargo.getRef(), getDate("2007-12-09"), Instant.now(), HandlingEvent.Type.CLAIM, MELBOURNE));
     cargo.deriveDeliveryProgress(new HandlingHistory(events));
 
     return cargo;
@@ -188,11 +188,11 @@ public class CargoTest {
     final Cargo cargo = new Cargo(new TrackingId("XYZ"), new RouteSpecification(STOCKHOLM, MELBOURNE, Instant.now()));
 
 
-    events.add(new HandlingEvent(cargo, getDate("2007-12-01"), Instant.now(), HandlingEvent.Type.LOAD, STOCKHOLM, voyage));
-    events.add(new HandlingEvent(cargo, getDate("2007-12-02"), Instant.now(), HandlingEvent.Type.UNLOAD, HAMBURG, voyage));
+    events.add(new HandlingEvent(cargo.getRef(), getDate("2007-12-01"), Instant.now(), HandlingEvent.Type.LOAD, STOCKHOLM, voyage));
+    events.add(new HandlingEvent(cargo.getRef(), getDate("2007-12-02"), Instant.now(), HandlingEvent.Type.UNLOAD, HAMBURG, voyage));
 
-    events.add(new HandlingEvent(cargo, getDate("2007-12-03"), Instant.now(), HandlingEvent.Type.LOAD, HAMBURG, voyage));
-    events.add(new HandlingEvent(cargo, getDate("2007-12-04"), Instant.now(), HandlingEvent.Type.UNLOAD, HONGKONG, voyage));
+    events.add(new HandlingEvent(cargo.getRef(), getDate("2007-12-03"), Instant.now(), HandlingEvent.Type.LOAD, HAMBURG, voyage));
+    events.add(new HandlingEvent(cargo.getRef(), getDate("2007-12-04"), Instant.now(), HandlingEvent.Type.UNLOAD, HONGKONG, voyage));
 
     cargo.deriveDeliveryProgress(new HandlingHistory(events));
     return cargo;
@@ -201,9 +201,9 @@ public class CargoTest {
   private Cargo populateCargoOnHamburg() throws Exception {
     final Cargo cargo = new Cargo(new TrackingId("XYZ"), new RouteSpecification(STOCKHOLM, MELBOURNE, Instant.now()));
 
-    events.add(new HandlingEvent(cargo, getDate("2007-12-01"), Instant.now(), HandlingEvent.Type.LOAD, STOCKHOLM, voyage));
-    events.add(new HandlingEvent(cargo, getDate("2007-12-02"), Instant.now(), HandlingEvent.Type.UNLOAD, HAMBURG, voyage));
-    events.add(new HandlingEvent(cargo, getDate("2007-12-03"), Instant.now(), HandlingEvent.Type.LOAD, HAMBURG, voyage));
+    events.add(new HandlingEvent(cargo.getRef(), getDate("2007-12-01"), Instant.now(), HandlingEvent.Type.LOAD, STOCKHOLM, voyage));
+    events.add(new HandlingEvent(cargo.getRef(), getDate("2007-12-02"), Instant.now(), HandlingEvent.Type.UNLOAD, HAMBURG, voyage));
+    events.add(new HandlingEvent(cargo.getRef(), getDate("2007-12-03"), Instant.now(), HandlingEvent.Type.LOAD, HAMBURG, voyage));
 
     cargo.deriveDeliveryProgress(new HandlingHistory(events));
     return cargo;
@@ -212,14 +212,14 @@ public class CargoTest {
   private Cargo populateCargoOffMelbourne() throws Exception {
     final Cargo cargo = new Cargo(new TrackingId("XYZ"), new RouteSpecification(STOCKHOLM, MELBOURNE, Instant.now()));
 
-    events.add(new HandlingEvent(cargo, getDate("2007-12-01"), Instant.now(), HandlingEvent.Type.LOAD, STOCKHOLM, voyage));
-    events.add(new HandlingEvent(cargo, getDate("2007-12-02"), Instant.now(), HandlingEvent.Type.UNLOAD, HAMBURG, voyage));
+    events.add(new HandlingEvent(cargo.getRef(), getDate("2007-12-01"), Instant.now(), HandlingEvent.Type.LOAD, STOCKHOLM, voyage));
+    events.add(new HandlingEvent(cargo.getRef(), getDate("2007-12-02"), Instant.now(), HandlingEvent.Type.UNLOAD, HAMBURG, voyage));
 
-    events.add(new HandlingEvent(cargo, getDate("2007-12-03"), Instant.now(), HandlingEvent.Type.LOAD, HAMBURG, voyage));
-    events.add(new HandlingEvent(cargo, getDate("2007-12-04"), Instant.now(), HandlingEvent.Type.UNLOAD, HONGKONG, voyage));
+    events.add(new HandlingEvent(cargo.getRef(), getDate("2007-12-03"), Instant.now(), HandlingEvent.Type.LOAD, HAMBURG, voyage));
+    events.add(new HandlingEvent(cargo.getRef(), getDate("2007-12-04"), Instant.now(), HandlingEvent.Type.UNLOAD, HONGKONG, voyage));
 
-    events.add(new HandlingEvent(cargo, getDate("2007-12-05"), Instant.now(), HandlingEvent.Type.LOAD, HONGKONG, voyage));
-    events.add(new HandlingEvent(cargo, getDate("2007-12-07"), Instant.now(), HandlingEvent.Type.UNLOAD, MELBOURNE, voyage));
+    events.add(new HandlingEvent(cargo.getRef(), getDate("2007-12-05"), Instant.now(), HandlingEvent.Type.LOAD, HONGKONG, voyage));
+    events.add(new HandlingEvent(cargo.getRef(), getDate("2007-12-07"), Instant.now(), HandlingEvent.Type.UNLOAD, MELBOURNE, voyage));
 
     cargo.deriveDeliveryProgress(new HandlingHistory(events));
     return cargo;
@@ -228,13 +228,13 @@ public class CargoTest {
   private Cargo populateCargoOnHongKong() throws Exception {
     final Cargo cargo = new Cargo(new TrackingId("XYZ"), new RouteSpecification(STOCKHOLM, MELBOURNE, Instant.now()));
 
-    events.add(new HandlingEvent(cargo, getDate("2007-12-01"), Instant.now(), HandlingEvent.Type.LOAD, STOCKHOLM, voyage));
-    events.add(new HandlingEvent(cargo, getDate("2007-12-02"), Instant.now(), HandlingEvent.Type.UNLOAD, HAMBURG, voyage));
+    events.add(new HandlingEvent(cargo.getRef(), getDate("2007-12-01"), Instant.now(), HandlingEvent.Type.LOAD, STOCKHOLM, voyage));
+    events.add(new HandlingEvent(cargo.getRef(), getDate("2007-12-02"), Instant.now(), HandlingEvent.Type.UNLOAD, HAMBURG, voyage));
 
-    events.add(new HandlingEvent(cargo, getDate("2007-12-03"), Instant.now(), HandlingEvent.Type.LOAD, HAMBURG, voyage));
-    events.add(new HandlingEvent(cargo, getDate("2007-12-04"), Instant.now(), HandlingEvent.Type.UNLOAD, HONGKONG, voyage));
+    events.add(new HandlingEvent(cargo.getRef(), getDate("2007-12-03"), Instant.now(), HandlingEvent.Type.LOAD, HAMBURG, voyage));
+    events.add(new HandlingEvent(cargo.getRef(), getDate("2007-12-04"), Instant.now(), HandlingEvent.Type.UNLOAD, HONGKONG, voyage));
 
-    events.add(new HandlingEvent(cargo, getDate("2007-12-05"), Instant.now(), HandlingEvent.Type.LOAD, HONGKONG, voyage));
+    events.add(new HandlingEvent(cargo.getRef(), getDate("2007-12-05"), Instant.now(), HandlingEvent.Type.LOAD, HONGKONG, voyage));
 
     cargo.deriveDeliveryProgress(new HandlingHistory(events));
     return cargo;
@@ -254,13 +254,13 @@ public class CargoTest {
     Collection<HandlingEvent> handlingEvents = new ArrayList<HandlingEvent>();
 
     //Happy path
-    handlingEvents.add(new HandlingEvent(cargo, Instant.ofEpochSecond(10), Instant.ofEpochSecond(20), HandlingEvent.Type.RECEIVE, SHANGHAI));
-    handlingEvents.add(new HandlingEvent(cargo, Instant.ofEpochSecond(30), Instant.ofEpochSecond(40), HandlingEvent.Type.LOAD, SHANGHAI, voyage));
-    handlingEvents.add(new HandlingEvent(cargo, Instant.ofEpochSecond(50), Instant.ofEpochSecond(60), HandlingEvent.Type.UNLOAD, ROTTERDAM, voyage));
-    handlingEvents.add(new HandlingEvent(cargo, Instant.ofEpochSecond(70), Instant.ofEpochSecond(80), HandlingEvent.Type.LOAD, ROTTERDAM, voyage));
-    handlingEvents.add(new HandlingEvent(cargo, Instant.ofEpochSecond(90), Instant.ofEpochSecond(100), HandlingEvent.Type.UNLOAD, GOTHENBURG, voyage));
-    handlingEvents.add(new HandlingEvent(cargo, Instant.ofEpochSecond(110), Instant.ofEpochSecond(120), HandlingEvent.Type.CLAIM, GOTHENBURG));
-    handlingEvents.add(new HandlingEvent(cargo, Instant.ofEpochSecond(130), Instant.ofEpochSecond(140), HandlingEvent.Type.CUSTOMS, GOTHENBURG));
+    handlingEvents.add(new HandlingEvent(cargo.getRef(), Instant.ofEpochSecond(10), Instant.ofEpochSecond(20), HandlingEvent.Type.RECEIVE, SHANGHAI));
+    handlingEvents.add(new HandlingEvent(cargo.getRef(), Instant.ofEpochSecond(30), Instant.ofEpochSecond(40), HandlingEvent.Type.LOAD, SHANGHAI, voyage));
+    handlingEvents.add(new HandlingEvent(cargo.getRef(), Instant.ofEpochSecond(50), Instant.ofEpochSecond(60), HandlingEvent.Type.UNLOAD, ROTTERDAM, voyage));
+    handlingEvents.add(new HandlingEvent(cargo.getRef(), Instant.ofEpochSecond(70), Instant.ofEpochSecond(80), HandlingEvent.Type.LOAD, ROTTERDAM, voyage));
+    handlingEvents.add(new HandlingEvent(cargo.getRef(), Instant.ofEpochSecond(90), Instant.ofEpochSecond(100), HandlingEvent.Type.UNLOAD, GOTHENBURG, voyage));
+    handlingEvents.add(new HandlingEvent(cargo.getRef(), Instant.ofEpochSecond(110), Instant.ofEpochSecond(120), HandlingEvent.Type.CLAIM, GOTHENBURG));
+    handlingEvents.add(new HandlingEvent(cargo.getRef(), Instant.ofEpochSecond(130), Instant.ofEpochSecond(140), HandlingEvent.Type.CUSTOMS, GOTHENBURG));
 
     events.addAll(handlingEvents);
     cargo.deriveDeliveryProgress(new HandlingHistory(events));
@@ -271,7 +271,7 @@ public class CargoTest {
     cargo = setUpCargoWithItinerary(SHANGHAI, ROTTERDAM, GOTHENBURG);
     handlingEvents = new ArrayList<HandlingEvent>();
 
-    handlingEvents.add(new HandlingEvent(cargo, Instant.now(), Instant.now(), HandlingEvent.Type.RECEIVE, HANGZHOU));
+    handlingEvents.add(new HandlingEvent(cargo.getRef(), Instant.now(), Instant.now(), HandlingEvent.Type.RECEIVE, HANGZHOU));
     events.addAll(handlingEvents);
     cargo.deriveDeliveryProgress(new HandlingHistory(events));
 
@@ -281,10 +281,10 @@ public class CargoTest {
     cargo = setUpCargoWithItinerary(SHANGHAI, ROTTERDAM, GOTHENBURG);
     handlingEvents = new ArrayList<HandlingEvent>();
 
-    handlingEvents.add(new HandlingEvent(cargo, Instant.ofEpochSecond(10), Instant.ofEpochSecond(20), HandlingEvent.Type.RECEIVE, SHANGHAI));
-    handlingEvents.add(new HandlingEvent(cargo, Instant.ofEpochSecond(30), Instant.ofEpochSecond(40), HandlingEvent.Type.LOAD, SHANGHAI, voyage));
-    handlingEvents.add(new HandlingEvent(cargo, Instant.ofEpochSecond(50), Instant.ofEpochSecond(60), HandlingEvent.Type.UNLOAD, ROTTERDAM, voyage));
-    handlingEvents.add(new HandlingEvent(cargo, Instant.ofEpochSecond(70), Instant.ofEpochSecond(80), HandlingEvent.Type.LOAD, ROTTERDAM, voyage));
+    handlingEvents.add(new HandlingEvent(cargo.getRef(), Instant.ofEpochSecond(10), Instant.ofEpochSecond(20), HandlingEvent.Type.RECEIVE, SHANGHAI));
+    handlingEvents.add(new HandlingEvent(cargo.getRef(), Instant.ofEpochSecond(30), Instant.ofEpochSecond(40), HandlingEvent.Type.LOAD, SHANGHAI, voyage));
+    handlingEvents.add(new HandlingEvent(cargo.getRef(), Instant.ofEpochSecond(50), Instant.ofEpochSecond(60), HandlingEvent.Type.UNLOAD, ROTTERDAM, voyage));
+    handlingEvents.add(new HandlingEvent(cargo.getRef(), Instant.ofEpochSecond(70), Instant.ofEpochSecond(80), HandlingEvent.Type.LOAD, ROTTERDAM, voyage));
 
     events.addAll(handlingEvents);
     cargo.deriveDeliveryProgress(new HandlingHistory(events));
@@ -295,10 +295,10 @@ public class CargoTest {
     cargo = setUpCargoWithItinerary(SHANGHAI, ROTTERDAM, GOTHENBURG);
     handlingEvents = new ArrayList<HandlingEvent>();
 
-    handlingEvents.add(new HandlingEvent(cargo, Instant.ofEpochSecond(10), Instant.ofEpochSecond(20), HandlingEvent.Type.RECEIVE, SHANGHAI));
-    handlingEvents.add(new HandlingEvent(cargo, Instant.ofEpochSecond(30), Instant.ofEpochSecond(40), HandlingEvent.Type.LOAD, SHANGHAI, voyage));
-    handlingEvents.add(new HandlingEvent(cargo, Instant.ofEpochSecond(50), Instant.ofEpochSecond(60), HandlingEvent.Type.UNLOAD, ROTTERDAM, voyage));
-    handlingEvents.add(new HandlingEvent(cargo, Instant.now(), Instant.now(), HandlingEvent.Type.CLAIM, ROTTERDAM));
+    handlingEvents.add(new HandlingEvent(cargo.getRef(), Instant.ofEpochSecond(10), Instant.ofEpochSecond(20), HandlingEvent.Type.RECEIVE, SHANGHAI));
+    handlingEvents.add(new HandlingEvent(cargo.getRef(), Instant.ofEpochSecond(30), Instant.ofEpochSecond(40), HandlingEvent.Type.LOAD, SHANGHAI, voyage));
+    handlingEvents.add(new HandlingEvent(cargo.getRef(), Instant.ofEpochSecond(50), Instant.ofEpochSecond(60), HandlingEvent.Type.UNLOAD, ROTTERDAM, voyage));
+    handlingEvents.add(new HandlingEvent(cargo.getRef(), Instant.now(), Instant.now(), HandlingEvent.Type.CLAIM, ROTTERDAM));
 
     events.addAll(handlingEvents);
     cargo.deriveDeliveryProgress(new HandlingHistory(events));

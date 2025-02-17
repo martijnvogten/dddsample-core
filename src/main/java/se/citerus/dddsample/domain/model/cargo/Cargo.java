@@ -57,10 +57,36 @@ import se.citerus.dddsample.domain.shared.DomainEntity;
  * in port etc), are captured in this aggregate.
  *
  */
-@Entity(name = "Cargo")
+// @Entity(name = "Cargo")
 @Table(name = "Cargo")
 @nl.pojoquery.annotations.Table("cargo")
 public class Cargo implements DomainEntity<Cargo> {
+  
+  
+  @nl.pojoquery.annotations.Table("cargo")
+  public static class CargoRef {
+    @nl.pojoquery.annotations.Id
+    private Long id;
+    
+    @FieldName("tracking_id")
+    private String trackingId;
+    
+    public CargoRef(Long id, String trackingId) {
+      this.id = id;
+      this.trackingId = trackingId;
+    }
+    
+    protected CargoRef() {
+    };
+    
+    public Long id() {
+      return id;
+    }
+    
+    public TrackingId trackingId() {
+      return new TrackingId(trackingId);
+    }
+  }
 
   @nl.pojoquery.annotations.Id
   @Id
@@ -144,7 +170,7 @@ public class Cargo implements DomainEntity<Cargo> {
    *
    * @return the id of the cargo, note that the id is not the tracking id.
    */
-  public long id(){
+  public Long id(){
     return id;
   }
 
@@ -243,6 +269,10 @@ public class Cargo implements DomainEntity<Cargo> {
   @Override
   public String toString() {
     return trackingId;
+  }
+  
+  public CargoRef getRef() {
+    return new CargoRef(id, trackingId);
   }
 
   protected Cargo() {

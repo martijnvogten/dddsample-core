@@ -23,7 +23,7 @@ import se.citerus.dddsample.domain.shared.ValueObject;
 /**
  * An itinerary consists of one or more legs.
  */
-@Entity(name = "Leg")
+// @Entity(name = "Leg")
 @Table(name = "Leg")
 @nl.pojoquery.annotations.Table("leg")
 public class Leg implements ValueObject<Leg> {
@@ -32,13 +32,15 @@ public class Leg implements ValueObject<Leg> {
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
   private Long id;
-
+  
   @Link(linkfield = "voyage_id")
+  @FieldName("voyage_id")
   @ManyToOne
   @JoinColumn(name="voyage_id")
   private Voyage voyage;
 
   @Link(linkfield = "load_location_id")
+  @FieldName("load_location_id")
   @ManyToOne
   @JoinColumn(name = "load_location_id")
   private Location loadLocation;
@@ -48,6 +50,7 @@ public class Leg implements ValueObject<Leg> {
   private Instant loadTime;
 
   @Link(linkfield = "unload_location_id")
+  @FieldName("unload_location_id")
   @ManyToOne
   @JoinColumn(name = "unload_location_id")
   private Location unloadLocation;

@@ -30,9 +30,9 @@ public class HandlingHistoryTest {
       addMovement(SHANGHAI, Instant.now(), Instant.now()).
       addMovement(DALLAS, Instant.now(), Instant.now()).
       build();
-    event1 = new HandlingEvent(cargo, toDate("2009-03-05"), Instant.ofEpochMilli(100), HandlingEvent.Type.LOAD, SHANGHAI, voyage);
-    event1duplicate = new HandlingEvent(cargo, toDate("2009-03-05"), Instant.ofEpochMilli(200), HandlingEvent.Type.LOAD, SHANGHAI, voyage);
-    event2 = new HandlingEvent(cargo, toDate("2009-03-10"), Instant.ofEpochMilli(150), HandlingEvent.Type.UNLOAD, DALLAS, voyage);
+    event1 = new HandlingEvent(cargo.getRef(), toDate("2009-03-05"), Instant.ofEpochMilli(100), HandlingEvent.Type.LOAD, SHANGHAI, voyage);
+    event1duplicate = new HandlingEvent(cargo.getRef(), toDate("2009-03-05"), Instant.ofEpochMilli(200), HandlingEvent.Type.LOAD, SHANGHAI, voyage);
+    event2 = new HandlingEvent(cargo.getRef(), toDate("2009-03-10"), Instant.ofEpochMilli(150), HandlingEvent.Type.UNLOAD, DALLAS, voyage);
 
     handlingHistory = new HandlingHistory(List.of(event2, event1, event1duplicate));
   }
