@@ -1,16 +1,17 @@
 package se.citerus.dddsample.infrastructure.sampledata;
 
-import jakarta.annotation.PostConstruct;
-import org.springframework.lang.NonNull;
-import org.springframework.transaction.PlatformTransactionManager;
-import org.springframework.transaction.TransactionStatus;
-import org.springframework.transaction.support.TransactionCallbackWithoutResult;
-import org.springframework.transaction.support.TransactionTemplate;
-import se.citerus.dddsample.domain.model.cargo.*;
-import se.citerus.dddsample.domain.model.handling.*;
-import se.citerus.dddsample.domain.model.location.Location;
-import se.citerus.dddsample.domain.model.location.LocationRepository;
-import se.citerus.dddsample.domain.model.voyage.VoyageRepository;
+import static se.citerus.dddsample.application.util.DateUtils.toDate;
+import static se.citerus.dddsample.infrastructure.sampledata.SampleLocations.DALLAS;
+import static se.citerus.dddsample.infrastructure.sampledata.SampleLocations.HANGZHOU;
+import static se.citerus.dddsample.infrastructure.sampledata.SampleLocations.HELSINKI;
+import static se.citerus.dddsample.infrastructure.sampledata.SampleLocations.HONGKONG;
+import static se.citerus.dddsample.infrastructure.sampledata.SampleLocations.NEWYORK;
+import static se.citerus.dddsample.infrastructure.sampledata.SampleLocations.STOCKHOLM;
+import static se.citerus.dddsample.infrastructure.sampledata.SampleVoyages.DALLAS_TO_HELSINKI;
+import static se.citerus.dddsample.infrastructure.sampledata.SampleVoyages.DALLAS_TO_HELSINKI_ALT;
+import static se.citerus.dddsample.infrastructure.sampledata.SampleVoyages.HELSINKI_TO_HONGKONG;
+import static se.citerus.dddsample.infrastructure.sampledata.SampleVoyages.HONGKONG_TO_NEW_YORK;
+import static se.citerus.dddsample.infrastructure.sampledata.SampleVoyages.NEW_YORK_TO_DALLAS;
 
 import java.sql.Timestamp;
 import java.time.Instant;
@@ -19,9 +20,29 @@ import java.time.ZoneOffset;
 import java.time.format.DateTimeParseException;
 import java.util.List;
 
-import static se.citerus.dddsample.application.util.DateUtils.toDate;
-import static se.citerus.dddsample.infrastructure.sampledata.SampleLocations.*;
-import static se.citerus.dddsample.infrastructure.sampledata.SampleVoyages.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.lang.NonNull;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.support.TransactionCallbackWithoutResult;
+import org.springframework.transaction.support.TransactionTemplate;
+
+import jakarta.annotation.PostConstruct;
+import se.citerus.dddsample.config.ResetDatabaseBean;
+import se.citerus.dddsample.domain.model.cargo.Cargo;
+import se.citerus.dddsample.domain.model.cargo.CargoRepository;
+import se.citerus.dddsample.domain.model.cargo.Itinerary;
+import se.citerus.dddsample.domain.model.cargo.Leg;
+import se.citerus.dddsample.domain.model.cargo.RouteSpecification;
+import se.citerus.dddsample.domain.model.cargo.TrackingId;
+import se.citerus.dddsample.domain.model.handling.CannotCreateHandlingEventException;
+import se.citerus.dddsample.domain.model.handling.HandlingEvent;
+import se.citerus.dddsample.domain.model.handling.HandlingEventFactory;
+import se.citerus.dddsample.domain.model.handling.HandlingEventRepository;
+import se.citerus.dddsample.domain.model.handling.HandlingHistory;
+import se.citerus.dddsample.domain.model.location.Location;
+import se.citerus.dddsample.domain.model.location.LocationRepository;
+import se.citerus.dddsample.domain.model.voyage.VoyageRepository;
 
 /**
  * Provides sample data.
@@ -36,7 +57,7 @@ public class SampleDataGenerator  {
     private final LocationRepository locationRepository;
     private final HandlingEventRepository handlingEventRepository;
     private final PlatformTransactionManager transactionManager;
-
+    
     public SampleDataGenerator(@NonNull CargoRepository cargoRepository,
                                @NonNull VoyageRepository voyageRepository,
                                @NonNull LocationRepository locationRepository,
@@ -60,12 +81,17 @@ public class SampleDataGenerator  {
                 locationRepository);
         loadHibernateData(tt, handlingEventFactory);
     }
+    
+    @SuppressWarnings("unused")
+    @Autowired
+    private ResetDatabaseBean resetDatabase;
 
     public void loadHibernateData(TransactionTemplate tt, final HandlingEventFactory handlingEventFactory) {
         log.info("*** Loading Hibernate data ***");
         tt.execute(new TransactionCallbackWithoutResult() {
             @Override
             protected void doInTransactionWithoutResult(TransactionStatus status) {
+                
                 for (Location location : SampleLocations.getAll()) {
                     locationRepository.store(location);
                 }

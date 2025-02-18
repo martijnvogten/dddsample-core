@@ -14,7 +14,7 @@ import java.util.Objects;
  */
 // @Entity(name = "Location")
 @Table(name = "Location")
-@nl.pojoquery.annotations.Table("location")
+@nl.pojoquery.annotations.Table(value="location")
 public final class Location implements DomainEntity<Location> {
 
   @nl.pojoquery.annotations.Id

@@ -86,6 +86,23 @@ public class Cargo implements DomainEntity<Cargo> {
     public TrackingId trackingId() {
       return new TrackingId(trackingId);
     }
+
+    @Override
+    public int hashCode() {
+      return Objects.hash(trackingId);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+      if (this == obj)
+        return true;
+      if (obj == null)
+        return false;
+      if (getClass() != obj.getClass())
+        return false;
+      CargoRef other = (CargoRef) obj;
+      return Objects.equals(trackingId, other.trackingId);
+    }
   }
 
   @nl.pojoquery.annotations.Id

@@ -34,13 +34,11 @@ public class Leg implements ValueObject<Leg> {
   private Long id;
   
   @Link(linkfield = "voyage_id")
-  @FieldName("voyage_id")
   @ManyToOne
   @JoinColumn(name="voyage_id")
   private Voyage voyage;
 
   @Link(linkfield = "load_location_id")
-  @FieldName("load_location_id")
   @ManyToOne
   @JoinColumn(name = "load_location_id")
   private Location loadLocation;
@@ -50,7 +48,6 @@ public class Leg implements ValueObject<Leg> {
   private Instant loadTime;
 
   @Link(linkfield = "unload_location_id")
-  @FieldName("unload_location_id")
   @ManyToOne
   @JoinColumn(name = "unload_location_id")
   private Location unloadLocation;

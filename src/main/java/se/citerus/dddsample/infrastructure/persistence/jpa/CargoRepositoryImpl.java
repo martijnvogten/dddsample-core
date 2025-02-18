@@ -23,7 +23,7 @@ public class CargoRepositoryImpl implements CargoRepository {
   public Cargo find(TrackingId trackingId) {
     return db.doWork(conn -> {
       List<Cargo> list = PojoQuery.build(Cargo.class).addWhere("{this}.tracking_id=?", trackingId.toString())
-          .execute(conn);
+            .execute(conn);
       return list.size() > 0 ? list.get(0) : null;
     });
   }
@@ -59,11 +59,17 @@ public class CargoRepositoryImpl implements CargoRepository {
 
   @Override
   public TrackingId nextTrackingId() {
-    String trackingIDString = db.doWork(conn -> {
-      List<String> result = DB.queryColumns(conn, "SELECT UPPER(SUBSTR(CAST(UUID() AS CHAR(38)), 1, 8))").get(0);
-      return result.get(0);
+    return db.doWork(conn -> {
+      boolean isMySQL = conn.getMetaData().getURL().startsWith("jdbc:mysql:");
+      String select = isMySQL ?
+          "SELECT UPPER(SUBSTR(CAST(UUID() AS CHAR(38)), 1, 8))"
+          :
+          // HSQLDB
+          "SELECT UPPER(SUBSTR(CAST(UUID() AS VARCHAR(38)), 0, 9)) AS id FROM (VALUES(0))";
+      
+      List<String> result = DB.queryColumns(conn, select).get(0);
+      return new TrackingId(result.get(0));
     });
-    return new TrackingId(trackingIDString);
   }
 
 }

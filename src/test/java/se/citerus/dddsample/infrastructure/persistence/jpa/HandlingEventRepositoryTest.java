@@ -1,6 +1,11 @@
 package se.citerus.dddsample.infrastructure.persistence.jpa;
 
-import jakarta.persistence.EntityManager;
+import static org.assertj.core.api.Assertions.assertThat;
+
+import java.time.Instant;
+import java.util.List;
+import java.util.Map;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +14,10 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
+
+import jakarta.persistence.EntityManager;
+import nl.pojoquery.DB;
+import nl.pojoquery.PojoQuery;
 import se.citerus.dddsample.domain.model.cargo.Cargo;
 import se.citerus.dddsample.domain.model.cargo.CargoRepository;
 import se.citerus.dddsample.domain.model.cargo.TrackingId;
@@ -17,11 +26,6 @@ import se.citerus.dddsample.domain.model.handling.HandlingEventRepository;
 import se.citerus.dddsample.domain.model.location.Location;
 import se.citerus.dddsample.domain.model.location.LocationRepository;
 import se.citerus.dddsample.domain.model.location.UnLocode;
-
-import java.time.Instant;
-import java.util.List;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 @ExtendWith(SpringExtension.class)
 @DataJpaTest
@@ -41,6 +45,9 @@ public class HandlingEventRepositoryTest {
 
     @Autowired
     EntityManager entityManager;
+    
+    @Autowired
+    CargoDatabase cargoDatabase;
 
     @Test
     public void testSave() {
@@ -54,15 +61,21 @@ public class HandlingEventRepositoryTest {
         handlingEventRepository.store(event);
 
         flush();
+        
+        cargoDatabase.doWork(conn -> {
+          HandlingEvent result = PojoQuery.build(HandlingEvent.class).findById(conn, event.id());
+          
+          assertThat(result.cargo().id()).isEqualTo(cargo.id());
+          Instant completionDate = result.completionTime();
+          assertThat(completionDate).isEqualTo(Instant.ofEpochMilli(10));
+          Instant registrationDate = result.registrationTime();
+          assertThat(registrationDate).isEqualTo(Instant.ofEpochMilli(20));
+          assertThat(result.type()).isEqualTo(HandlingEvent.Type.CLAIM);
+          return null;
+        });
 
-        HandlingEvent result = entityManager.createQuery(String.format("select he from HandlingEvent he where he.id = %d", event.id()), HandlingEvent.class).getSingleResult();
+//        HandlingEvent result = entityManager.createQuery(String.format("select he from HandlingEvent he where he.id = %d", event.id()), HandlingEvent.class).getSingleResult();
 
-        assertThat(result.cargo().id()).isEqualTo(cargo.id());
-        Instant completionDate = result.completionTime();
-        assertThat(completionDate).isEqualTo(Instant.ofEpochMilli(10));
-        Instant registrationDate = result.registrationTime();
-        assertThat(registrationDate).isEqualTo(Instant.ofEpochMilli(20));
-        assertThat(result.type()).isEqualTo(HandlingEvent.Type.CLAIM);
         // TODO: the rest of the columns
     }
 

@@ -10,7 +10,10 @@ import org.hibernate.Session;
 import org.hibernate.jdbc.ReturningWork;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import jakarta.annotation.PostConstruct;
 import jakarta.persistence.EntityManager;
+import nl.pojoquery.DbContext;
+import nl.pojoquery.DbContext.QuoteStyle;
 
 public class CargoDatabase {
   
@@ -20,8 +23,18 @@ public class CargoDatabase {
   @Autowired
   EntityManager entityManager;
   
+  @PostConstruct
+  private void configureDbContext() {
+    entityManager.unwrap(Session.class).doWork((conn) -> {
+      DbContext pojoqueryConfig = DbContext.getDefault();
+      boolean isMysql = conn.getMetaData().getURL().startsWith("jdbc:mysql:");
+      pojoqueryConfig.setQuoteStyle(isMysql ? QuoteStyle.MYSQL : QuoteStyle.ANSI);
+      pojoqueryConfig.setQuoteObjectNames(false);
+    });
+  }
+  
   public interface Work<T> {
-    T execute(Connection conn);
+    T execute(Connection conn) throws SQLException;
   }
   
   public <T> T doWork(Work<T> w) {
@@ -36,4 +49,6 @@ public class CargoDatabase {
       throw new RuntimeException(hibernateException);
     }
   }
+  
+  
 }

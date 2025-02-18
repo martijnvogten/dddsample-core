@@ -8,7 +8,6 @@ import org.springframework.transaction.PlatformTransactionManager;
 
 import com.pathfinder.api.GraphTraversalService;
 
-import nl.pojoquery.DbContext;
 import se.citerus.dddsample.application.ApplicationEvents;
 import se.citerus.dddsample.application.BookingService;
 import se.citerus.dddsample.application.CargoInspectionService;
@@ -38,12 +37,6 @@ import se.citerus.dddsample.interfaces.InterfacesApplicationContext;
 @Import({InterfacesApplicationContext.class, InfrastructureMessagingJmsConfig.class})
 public class DDDSampleApplicationContext {
 	
-	static {
-		DbContext pojoqueryConfig = DbContext.getDefault();
-		pojoqueryConfig.setQuoteStyle(nl.pojoquery.DbContext.QuoteStyle.MYSQL);
-		pojoqueryConfig.setQuoteObjectNames(false);
-	}
-
 	@Autowired
 	private GraphTraversalService graphTraversalService;
 	

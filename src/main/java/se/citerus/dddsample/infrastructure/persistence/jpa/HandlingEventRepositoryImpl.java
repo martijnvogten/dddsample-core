@@ -24,8 +24,8 @@ public class HandlingEventRepositoryImpl implements HandlingEventRepository {
 	//   @Query("select he from HandlingEvent he where he.cargo.trackingId = :trackingId and he.location is not NULL")
 	public HandlingHistory lookupHandlingHistoryOfCargo(TrackingId trackingId) {
 		return new HandlingHistory(db.doWork(conn -> PojoQuery.build(HandlingEvent.class)
-		    .addWhere("cargo.tracking_id = ?", trackingId.idString())
-		    .addWhere("location.id IS NOT NULL")
+		    .addWhere("{cargo}.tracking_id = ?", trackingId.idString())
+		    .addWhere("{location}.id IS NOT NULL")
 		    .execute(conn)
 		));
 	}

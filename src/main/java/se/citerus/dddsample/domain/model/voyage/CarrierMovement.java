@@ -27,13 +27,11 @@ public final class CarrierMovement implements ValueObject<CarrierMovement> {
   private Long id;
 
   @Link(linkfield = "arrival_location_id")
-  @FieldName("arrival_location_id")
   @ManyToOne(fetch = FetchType.EAGER)
   @JoinColumn(name = "arrival_location_id", nullable = false)
   private Location arrivalLocation;
 
   @Link(linkfield = "departure_location_id")
-  @FieldName("departure_location_id")
   @ManyToOne(fetch = FetchType.EAGER)
   @JoinColumn(name = "departure_location_id", nullable = false)
   private Location departureLocation;
