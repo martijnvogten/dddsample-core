@@ -89,7 +89,7 @@ public class CargoRepositoryTest {
         assertThat(legs).hasSize(3)
             .extracting("voyage.voyageNumber", "loadLocation", "unloadLocation")
             .containsExactly(
-                Tuple.tuple(null, HONGKONG, NEWYORK),
+                Tuple.tuple("0100S", HONGKONG, NEWYORK),
                 Tuple.tuple("0200T", NEWYORK, DALLAS),
                 Tuple.tuple("0300A", DALLAS, HELSINKI));
     }
