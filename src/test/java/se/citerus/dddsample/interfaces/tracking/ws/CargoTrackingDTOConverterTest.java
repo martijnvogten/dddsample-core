@@ -179,8 +179,8 @@ class CargoTrackingDTOConverterTest {
         public Stream<? extends Arguments> provideArguments(ExtensionContext context) throws Exception {
             Location origin = new Location(new UnLocode("SESTO"), "Stockholm");
             return Stream.of(
-                    Arguments.of(new HandlingActivity(HandlingEvent.Type.LOAD, origin, exampleVoyage()), "Next expected activity is to load cargo onto voyage 0101 in Stockholm"),
-                    Arguments.of(new HandlingActivity(HandlingEvent.Type.UNLOAD, origin, exampleVoyage()), "Next expected activity is to unload cargo off of 0101 in Stockholm"),
+                    Arguments.of(new HandlingActivity(HandlingEvent.Type.LOAD, origin, exampleVoyage().getRef()), "Next expected activity is to load cargo onto voyage 0101 in Stockholm"),
+                    Arguments.of(new HandlingActivity(HandlingEvent.Type.UNLOAD, origin, exampleVoyage().getRef()), "Next expected activity is to unload cargo off of 0101 in Stockholm"),
                     Arguments.of(new HandlingActivity(HandlingEvent.Type.RECEIVE, origin), "Next expected activity is to receive cargo in Stockholm"),
                     Arguments.of(new HandlingActivity(HandlingEvent.Type.CLAIM, origin), "Next expected activity is to claim cargo in Stockholm"),
                     Arguments.of(new HandlingActivity(HandlingEvent.Type.CUSTOMS, origin), "Next expected activity is to customs cargo in Stockholm")

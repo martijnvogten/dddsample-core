@@ -16,6 +16,7 @@ import nl.pojoquery.annotations.Link;
 import se.citerus.dddsample.domain.model.handling.HandlingEvent;
 import se.citerus.dddsample.domain.model.location.Location;
 import se.citerus.dddsample.domain.model.voyage.Voyage;
+import se.citerus.dddsample.domain.model.voyage.Voyage.VoyageRef;
 import se.citerus.dddsample.domain.shared.ValueObject;
 
 /**
@@ -44,7 +45,7 @@ public class HandlingActivity implements ValueObject<HandlingActivity> {
   @FieldName("next_expected_voyage_id")
   @ManyToOne
   @JoinColumn(name = "next_expected_voyage_id")
-  public Voyage voyage;
+  public VoyageRef voyage;
 
   public HandlingActivity(final HandlingEvent.Type type, final Location location) {
     Objects.requireNonNull(type, "Handling event type is required");
@@ -54,7 +55,7 @@ public class HandlingActivity implements ValueObject<HandlingActivity> {
     this.location = location;
   }
 
-  public HandlingActivity(final HandlingEvent.Type type, final Location location, final Voyage voyage) {
+  public HandlingActivity(final HandlingEvent.Type type, final Location location, final VoyageRef voyage) {
     Objects.requireNonNull(type, "Handling event type is required");
     Objects.requireNonNull(location, "Location is required");
     Objects.requireNonNull(location, "Voyage is required");
@@ -72,7 +73,7 @@ public class HandlingActivity implements ValueObject<HandlingActivity> {
     return location;
   }
 
-  public Voyage voyage() {
+  public VoyageRef voyage() {
     return voyage;
   }
 

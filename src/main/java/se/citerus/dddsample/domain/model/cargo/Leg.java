@@ -7,7 +7,6 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -18,6 +17,7 @@ import nl.pojoquery.annotations.FieldName;
 import nl.pojoquery.annotations.Link;
 import se.citerus.dddsample.domain.model.location.Location;
 import se.citerus.dddsample.domain.model.voyage.Voyage;
+import se.citerus.dddsample.domain.model.voyage.Voyage.VoyageRef;
 import se.citerus.dddsample.domain.shared.ValueObject;
 
 /**
@@ -36,7 +36,7 @@ public class Leg implements ValueObject<Leg> {
   @Link(linkfield = "voyage_id")
   @ManyToOne
   @JoinColumn(name="voyage_id")
-  private Voyage voyage;
+  private VoyageRef voyage;
 
   @Link(linkfield = "load_location_id")
   @ManyToOne
@@ -59,14 +59,14 @@ public class Leg implements ValueObject<Leg> {
   public Leg(Voyage voyage, Location loadLocation, Location unloadLocation, Instant loadTime, Instant unloadTime) {
     Validate.noNullElements(new Object[] {voyage, loadLocation, unloadLocation, loadTime, unloadTime});
     
-    this.voyage = voyage;
+    this.voyage = voyage.getRef();
     this.loadLocation = loadLocation;
     this.unloadLocation = unloadLocation;
     this.loadTime = loadTime;
     this.unloadTime = unloadTime;
   }
 
-  public Voyage voyage() {
+  public VoyageRef voyage() {
     return voyage;
   }
 

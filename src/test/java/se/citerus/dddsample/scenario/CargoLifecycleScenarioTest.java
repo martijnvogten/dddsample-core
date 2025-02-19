@@ -164,7 +164,7 @@ public class CargoLifecycleScenarioTest {
     assertThat(cargo.delivery().lastKnownLocation()).isEqualTo(HONGKONG);
     assertThat(cargo.delivery().transportStatus()).isEqualTo(ONBOARD_CARRIER);
     assertThat(cargo.delivery().isMisdirected()).isFalse();
-    assertThat(cargo.delivery().nextExpectedActivity()).isEqualTo(new HandlingActivity(UNLOAD, NEWYORK, v100));
+    assertThat(cargo.delivery().nextExpectedActivity()).isEqualTo(new HandlingActivity(UNLOAD, NEWYORK, v100.getRef()));
 
 
     /*
@@ -236,7 +236,7 @@ public class CargoLifecycleScenarioTest {
     assertThat(cargo.delivery().lastKnownLocation()).isEqualTo(TOKYO);
     assertThat(cargo.delivery().transportStatus()).isEqualTo(ONBOARD_CARRIER);
     assertThat(cargo.delivery().isMisdirected()).isFalse();
-    assertThat(cargo.delivery().nextExpectedActivity()).isEqualTo(new HandlingActivity(UNLOAD, HAMBURG, v300));
+    assertThat(cargo.delivery().nextExpectedActivity()).isEqualTo(new HandlingActivity(UNLOAD, HAMBURG, v300.getRef()));
 
     // Unload in Hamburg
     handlingEventService.registerHandlingEvent(
@@ -248,7 +248,7 @@ public class CargoLifecycleScenarioTest {
     assertThat(cargo.delivery().lastKnownLocation()).isEqualTo(HAMBURG);
     assertThat(cargo.delivery().transportStatus()).isEqualTo(IN_PORT);
     assertThat(cargo.delivery().isMisdirected()).isFalse();
-    assertThat(cargo.delivery().nextExpectedActivity()).isEqualTo(new HandlingActivity(LOAD, HAMBURG, v400));
+    assertThat(cargo.delivery().nextExpectedActivity()).isEqualTo(new HandlingActivity(LOAD, HAMBURG, v400.getRef()));
 
 
     // Load in Hamburg
@@ -261,7 +261,7 @@ public class CargoLifecycleScenarioTest {
     assertThat(cargo.delivery().lastKnownLocation()).isEqualTo(HAMBURG);
     assertThat(cargo.delivery().transportStatus()).isEqualTo(ONBOARD_CARRIER);
     assertThat(cargo.delivery().isMisdirected()).isFalse();
-    assertThat(cargo.delivery().nextExpectedActivity()).isEqualTo(new HandlingActivity(UNLOAD, STOCKHOLM, v400));
+    assertThat(cargo.delivery().nextExpectedActivity()).isEqualTo(new HandlingActivity(UNLOAD, STOCKHOLM, v400.getRef()));
 
 
     // Unload in Stockholm

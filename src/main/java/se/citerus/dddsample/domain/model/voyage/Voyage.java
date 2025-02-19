@@ -1,17 +1,23 @@
 package se.citerus.dddsample.domain.model.voyage;
 
-import jakarta.persistence.*;
-import nl.pojoquery.annotations.FieldName;
-import nl.pojoquery.annotations.Link;
-
-import org.apache.commons.lang3.Validate;
-import se.citerus.dddsample.domain.model.location.Location;
-import se.citerus.dddsample.domain.shared.DomainEntity;
-
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
+import nl.pojoquery.annotations.FieldName;
+import nl.pojoquery.annotations.Link;
+import se.citerus.dddsample.domain.model.location.Location;
+import se.citerus.dddsample.domain.shared.DomainEntity;
 
 /**
  * A Voyage.
@@ -20,6 +26,52 @@ import java.util.Objects;
 @Table(name = "Voyage")
 @nl.pojoquery.annotations.Table("voyage")
 public class Voyage implements DomainEntity<Voyage> {
+  
+  @nl.pojoquery.annotations.Table("voyage")
+  public static class VoyageRef {
+    @nl.pojoquery.annotations.Id
+    private Long id;
+    
+    @FieldName("voyage_number")
+    private String voyageNumber;
+    
+    public VoyageRef(Long id, String voyageNumber) {
+      this.id = id;
+      this.voyageNumber = voyageNumber;
+    }
+
+    public VoyageNumber voyageNumber() {
+      return new VoyageNumber(voyageNumber);
+    }
+    
+    public Long id() {
+      return id;
+    }
+    
+    @Override
+    public int hashCode() {
+      return voyageNumber.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+      if (this == o) return true;
+      if (o == null) return false;
+      if (!(o instanceof VoyageRef)) return false;
+
+      final VoyageRef that = (VoyageRef) o;
+
+      return sameIdentityAs(that);
+    }
+
+    public boolean sameIdentityAs(VoyageRef other) {
+      return other != null && this.voyageNumber().sameValueAs(other.voyageNumber());
+    }
+    
+    @SuppressWarnings("unused")
+    private VoyageRef() {
+    }
+  }
 
   @nl.pojoquery.annotations.Id
   @Id
@@ -94,6 +146,10 @@ public class Voyage implements DomainEntity<Voyage> {
 
   public Long id() {
     return id;
+  }
+  
+  public VoyageRef getRef() {
+    return new VoyageRef(id, voyageNumber);
   }
 
   /**

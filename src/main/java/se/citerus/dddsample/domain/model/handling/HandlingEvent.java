@@ -21,6 +21,7 @@ import nl.pojoquery.annotations.Link;
 import se.citerus.dddsample.domain.model.cargo.Cargo.CargoRef;
 import se.citerus.dddsample.domain.model.location.Location;
 import se.citerus.dddsample.domain.model.voyage.Voyage;
+import se.citerus.dddsample.domain.model.voyage.Voyage.VoyageRef;
 import se.citerus.dddsample.domain.shared.DomainEvent;
 import se.citerus.dddsample.domain.shared.ValueObject;
 
@@ -53,7 +54,7 @@ public final class HandlingEvent implements DomainEvent<HandlingEvent> {
   @Link(linkfield = "voyage_id")
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "voyage_id")
-  private Voyage voyage;
+  private VoyageRef voyage;
 
   @Link(linkfield = "location_id")
   @ManyToOne(fetch = FetchType.EAGER)
@@ -145,7 +146,7 @@ public final class HandlingEvent implements DomainEvent<HandlingEvent> {
       throw new IllegalArgumentException("Voyage is not allowed with event type " + type);
     }
 
-    this.voyage = voyage;
+    this.voyage = voyage.getRef();
     this.completionTime = completionTime;
     this.registrationTime = registrationTime;
     this.type = type;
@@ -187,8 +188,8 @@ public final class HandlingEvent implements DomainEvent<HandlingEvent> {
     return this.type;
   }
 
-  public Voyage voyage() {
-    return Objects.requireNonNullElse(this.voyage, Voyage.NONE);
+  public VoyageRef voyage() {
+    return Objects.requireNonNullElse(this.voyage, Voyage.NONE.getRef());
   }
 
   public Instant completionTime() {

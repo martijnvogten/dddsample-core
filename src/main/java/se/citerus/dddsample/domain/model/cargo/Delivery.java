@@ -29,6 +29,7 @@ import se.citerus.dddsample.domain.model.handling.HandlingEvent;
 import se.citerus.dddsample.domain.model.handling.HandlingHistory;
 import se.citerus.dddsample.domain.model.location.Location;
 import se.citerus.dddsample.domain.model.voyage.Voyage;
+import se.citerus.dddsample.domain.model.voyage.Voyage.VoyageRef;
 import se.citerus.dddsample.domain.shared.ValueObject;
 
 /**
@@ -71,7 +72,7 @@ public class Delivery implements ValueObject<Delivery> {
   @FieldName("current_voyage_id")
   @ManyToOne
   @JoinColumn(name = "current_voyage_id")
-  private Voyage currentVoyage;
+  private VoyageRef currentVoyage;
 
   @Link(linkfield = "last_known_location_id")
   @FieldName("last_known_location_id")
@@ -159,8 +160,8 @@ public class Delivery implements ValueObject<Delivery> {
   /**
    * @return Current voyage.
    */
-  public Voyage currentVoyage() {
-      return Objects.requireNonNullElse(currentVoyage, Voyage.NONE);
+  public VoyageRef currentVoyage() {
+      return Objects.requireNonNullElse(currentVoyage, Voyage.NONE.getRef());
   }
 
   /**
@@ -250,7 +251,7 @@ public class Delivery implements ValueObject<Delivery> {
     }
   }
 
-  private Voyage calculateCurrentVoyage() {
+  private VoyageRef calculateCurrentVoyage() {
     if (transportStatus().equals(ONBOARD_CARRIER) && lastEvent != null) {
       return lastEvent.voyage();
     } else {

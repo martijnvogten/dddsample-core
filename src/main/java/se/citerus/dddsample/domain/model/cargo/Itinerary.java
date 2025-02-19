@@ -62,7 +62,7 @@ public class Itinerary implements ValueObject<Itinerary> {
       //Check that the there is one leg with same load location and voyage
       for (Leg leg : legs) {
         if (leg.loadLocation().sameIdentityAs(event.location()) &&
-            leg.voyage().sameIdentityAs(event.voyage()))
+            leg.voyage().voyageNumber().equals(event.voyage().voyageNumber()))
           return true;
       }
       return false;

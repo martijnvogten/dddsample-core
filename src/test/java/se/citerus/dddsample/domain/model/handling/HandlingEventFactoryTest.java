@@ -58,8 +58,8 @@ public class HandlingEventFactoryTest {
 
     assertThat(handlingEvent).isNotNull();
     assertThat(handlingEvent.location()).isEqualTo(STOCKHOLM);
-    assertThat(handlingEvent.voyage()).isEqualTo(CM001);
-    assertThat(handlingEvent.cargo()).isEqualTo(cargo);
+    assertThat(handlingEvent.voyage().voyageNumber()).isEqualTo(CM001.voyageNumber());
+    assertThat(handlingEvent.cargo()).isEqualTo(cargo.getRef());
     assertThat(handlingEvent.completionTime()).isEqualTo(Instant.ofEpochMilli(100));
     assertThat(handlingEvent.registrationTime().isBefore(Instant.ofEpochMilli(System.currentTimeMillis() + 1))).isTrue();
   }
@@ -75,8 +75,8 @@ public class HandlingEventFactoryTest {
 
     assertThat(handlingEvent).isNotNull();
     assertThat(handlingEvent.location()).isEqualTo(STOCKHOLM);
-    assertThat(handlingEvent.voyage()).isEqualTo(Voyage.NONE);
-    assertThat(handlingEvent.cargo()).isEqualTo(cargo);
+    assertThat(handlingEvent.voyage().voyageNumber()).isEqualTo(Voyage.NONE.voyageNumber());
+    assertThat(handlingEvent.cargo()).isEqualTo(cargo.getRef());
     assertThat(handlingEvent.completionTime()).isEqualTo(Instant.ofEpochMilli(100));
     assertThat(handlingEvent.registrationTime().isBefore(Instant.ofEpochMilli(System.currentTimeMillis() + 1))).isTrue();
   }
