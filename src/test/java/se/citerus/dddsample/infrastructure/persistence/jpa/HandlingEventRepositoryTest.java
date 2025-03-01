@@ -62,17 +62,14 @@ public class HandlingEventRepositoryTest {
 
         flush();
         
-        cargoDatabase.doWork(conn -> {
-          HandlingEvent result = PojoQuery.build(HandlingEvent.class).findById(conn, event.id());
-          
-          assertThat(result.cargo().id()).isEqualTo(cargo.id());
-          Instant completionDate = result.completionTime();
-          assertThat(completionDate).isEqualTo(Instant.ofEpochMilli(10));
-          Instant registrationDate = result.registrationTime();
-          assertThat(registrationDate).isEqualTo(Instant.ofEpochMilli(20));
-          assertThat(result.type()).isEqualTo(HandlingEvent.Type.CLAIM);
-          return null;
-        });
+        HandlingEvent result = cargoDatabase.query(HandlingEvent.class).findById(event.id());
+        
+        assertThat(result.cargo().id()).isEqualTo(cargo.id());
+        Instant completionDate = result.completionTime();
+        assertThat(completionDate).isEqualTo(Instant.ofEpochMilli(10));
+        Instant registrationDate = result.registrationTime();
+        assertThat(registrationDate).isEqualTo(Instant.ofEpochMilli(20));
+        assertThat(result.type()).isEqualTo(HandlingEvent.Type.CLAIM);
 
 //        HandlingEvent result = entityManager.createQuery(String.format("select he from HandlingEvent he where he.id = %d", event.id()), HandlingEvent.class).getSingleResult();
 

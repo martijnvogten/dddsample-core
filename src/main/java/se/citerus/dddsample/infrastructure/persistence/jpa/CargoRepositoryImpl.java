@@ -1,6 +1,5 @@
 package se.citerus.dddsample.infrastructure.persistence.jpa;
 
-import java.sql.Connection;
 import java.util.List;
 import java.util.Map;
 
@@ -21,52 +20,47 @@ public class CargoRepositoryImpl implements CargoRepository {
 
   @Override
   public Cargo find(TrackingId trackingId) {
-    return db.doWork(conn -> {
-      List<Cargo> list = PojoQuery.build(Cargo.class).addWhere("{this}.tracking_id=?", trackingId.toString())
-            .execute(conn);
-      return list.size() > 0 ? list.get(0) : null;
-    });
+    List<Cargo> list = db.query(Cargo.class)
+        .addWhere("{cargo.trackingId} = ?", trackingId.toString())
+        .execute();
+    return list.size() > 0 ? list.get(0) : null;
   }
 
   @Override
   public List<Cargo> getAll() {
-    return db.doWork(conn -> PojoQuery.build(Cargo.class).execute(conn));
+    return db.query(Cargo.class).execute();
   }
 
   @Override
   public void store(Cargo cargo) {
-    db.doWork(conn -> {
-      if (cargo.id() == null) {
-        PojoQuery.insert(conn, cargo);
-        insertLegRecords(conn, cargo);
-      } else {
-        PojoQuery.update(conn, cargo);
-        DB.update(conn, SqlExpression.sql("DELETE FROM leg WHERE cargo_id = ?", cargo.id()));
-        insertLegRecords(conn, cargo);
-      }
-      return null;
-    });
+    if (cargo.id() == null) {
+      db.insert(cargo);
+      insertLegRecords(cargo);
+    } else {
+      db.update(cargo);
+      db.update(SqlExpression.sql("DELETE FROM leg WHERE cargo_id = ?", cargo.id()));
+      insertLegRecords(cargo);
+    }
   }
 
-  private void insertLegRecords(Connection conn, Cargo cargo) {
+  private void insertLegRecords(Cargo cargo) {
     for (Leg leg : cargo.itinerary().legs()) {
       Map<String, Object> legValues = PojoQuery.extractValues(Leg.class, leg);
       legValues.remove("id");
       legValues.put("cargo_id", cargo.id());
-      DB.insert(conn, "leg", legValues);
+      db.insert("leg", legValues);
     }
   }
 
   @Override
   public TrackingId nextTrackingId() {
-    return db.doWork(conn -> {
-      boolean isMySQL = conn.getMetaData().getURL().startsWith("jdbc:mysql:");
-      String select = isMySQL ?
-          "SELECT UPPER(SUBSTR(CAST(UUID() AS CHAR(38)), 1, 8))"
+    return db.doReturningWork(conn -> {
+      String select = db.isMySQL() ? 
+          "SELECT UPPER(SUBSTR(CAST(UUID() AS CHAR(38)), 1, 8))" 
           :
           // HSQLDB
           "SELECT UPPER(SUBSTR(CAST(UUID() AS VARCHAR(38)), 0, 9)) AS id FROM (VALUES(0))";
-      
+
       List<String> result = DB.queryColumns(conn, select).get(0);
       return new TrackingId(result.get(0));
     });
