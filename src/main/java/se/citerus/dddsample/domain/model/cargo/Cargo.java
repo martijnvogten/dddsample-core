@@ -4,22 +4,11 @@ import java.util.List;
 import java.util.Objects;
 
 import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Embedded;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import nl.pojoquery.annotations.FieldName;
 import nl.pojoquery.annotations.Link;
 import se.citerus.dddsample.domain.model.handling.HandlingHistory;
-import se.citerus.dddsample.domain.model.location.Location;
-import se.citerus.dddsample.domain.shared.DomainEntity;
 
 /**
  * A Cargo. This is the central class in the domain model,
@@ -59,78 +48,13 @@ import se.citerus.dddsample.domain.shared.DomainEntity;
  */
 // @Entity(name = "Cargo")
 @Table(name = "Cargo")
-@nl.pojoquery.annotations.Table("cargo")
-public class Cargo implements DomainEntity<Cargo> {
+public class Cargo extends CargoSummary {
   
   
-  @nl.pojoquery.annotations.Table("cargo")
-  public static class CargoRef {
-    @nl.pojoquery.annotations.Id
-    private Long id;
-    
-    @FieldName("tracking_id")
-    private String trackingId;
-    
-    public CargoRef(Long id, String trackingId) {
-      this.id = id;
-      this.trackingId = trackingId;
-    }
-    
-    protected CargoRef() {
-    };
-    
-    public Long id() {
-      return id;
-    }
-    
-    public TrackingId trackingId() {
-      return new TrackingId(trackingId);
-    }
-
-    @Override
-    public int hashCode() {
-      return Objects.hash(trackingId);
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-      if (this == obj)
-        return true;
-      if (obj == null)
-        return false;
-      if (getClass() != obj.getClass())
-        return false;
-      CargoRef other = (CargoRef) obj;
-      return Objects.equals(trackingId, other.trackingId);
-    }
-  }
-
-  @nl.pojoquery.annotations.Id
-  @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
-  private Long id;
-
-  @FieldName("tracking_id")
-  @Column(name = "tracking_id", unique = true)
-  private String trackingId;
-
-  @Link(linkfield = "origin_id")
-  @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "origin_id")
-  private Location origin;
-
-  @nl.pojoquery.annotations.Embedded(prefix="")
-  @Embedded
-  private RouteSpecification routeSpecification;
-
   @Link(linkfield = "cargo_id")
   @OneToMany(cascade = CascadeType.ALL)
   @JoinColumn(name = "cargo_id")
   private List<Leg> itinerary; // TODO figure out if we can map an Itinerary object instead
-
-  @nl.pojoquery.annotations.Embedded(prefix="")
-  @Embedded
-  private Delivery delivery;
 
   public Cargo(final TrackingId trackingId, final RouteSpecification routeSpecification) {
     Objects.requireNonNull(trackingId, "Tracking ID is required");
@@ -158,37 +82,6 @@ public class Cargo implements DomainEntity<Cargo> {
     this.delivery = Delivery.derivedFrom(
             this.routeSpecification, new Itinerary(this.itinerary), HandlingHistory.EMPTY
     );
-  }
-
-  /**
-   * The tracking id is the identity of this entity, and is unique.
-   * 
-   * @return Tracking id.
-   */
-  public TrackingId trackingId() {
-    return new TrackingId(trackingId);
-  }
-
-  /**
-   * @return Origin location.
-   */
-  public Location origin() {
-    return origin;
-  }
-
-  /**
-   * @return The delivery. Never null.
-   */
-  public Delivery delivery() {
-    return delivery;
-  }
-
-  /**
-   *
-   * @return the id of the cargo, note that the id is not the tracking id.
-   */
-  public Long id(){
-    return id;
   }
 
   /**
@@ -256,11 +149,6 @@ public class Cargo implements DomainEntity<Cargo> {
     this.delivery = Delivery.derivedFrom(routeSpecification(), itinerary(), handlingHistory.filterOnCargo(new TrackingId(this.trackingId)));
   }
 
-  @Override
-  public boolean sameIdentityAs(final Cargo other) {
-    return other != null && trackingId.equals(other.trackingId);
-  }
-
   /**
    * @param object to compare
    * @return True if they have the same identity
@@ -273,23 +161,6 @@ public class Cargo implements DomainEntity<Cargo> {
 
     final Cargo other = (Cargo) object;
     return sameIdentityAs(other);
-  }
-
-  /**
-   * @return Hash code of tracking id.
-   */
-  @Override
-  public int hashCode() {
-    return trackingId.hashCode();
-  }
-
-  @Override
-  public String toString() {
-    return trackingId;
-  }
-  
-  public CargoRef getRef() {
-    return new CargoRef(id, trackingId);
   }
 
   protected Cargo() {

@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import se.citerus.dddsample.interfaces.booking.facade.BookingServiceFacade;
 import se.citerus.dddsample.interfaces.booking.facade.dto.CargoRoutingDTO;
+import se.citerus.dddsample.interfaces.booking.facade.dto.CargoSummaryDTO;
 import se.citerus.dddsample.interfaces.booking.facade.dto.LegDTO;
 import se.citerus.dddsample.interfaces.booking.facade.dto.LocationDTO;
 import se.citerus.dddsample.interfaces.booking.facade.dto.RouteCandidateDTO;
@@ -78,7 +79,7 @@ public final class CargoAdminController {
 
     @RequestMapping("/list")
     public String list(HttpServletRequest request, HttpServletResponse response, Map<String, Object> model) throws Exception {
-        List<CargoRoutingDTO> cargoList = bookingServiceFacade.listAllCargos();
+        List<CargoSummaryDTO> cargoList = bookingServiceFacade.listAllCargos();
 
         model.put("cargoList", cargoList);
         return "admin/list";

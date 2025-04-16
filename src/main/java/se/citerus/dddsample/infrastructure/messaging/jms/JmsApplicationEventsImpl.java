@@ -9,7 +9,7 @@ import org.springframework.jms.core.JmsOperations;
 import jakarta.jms.Destination;
 import se.citerus.dddsample.application.ApplicationEvents;
 import se.citerus.dddsample.domain.model.cargo.Cargo;
-import se.citerus.dddsample.domain.model.cargo.Cargo.CargoRef;
+import se.citerus.dddsample.domain.model.cargo.CargoSummary.CargoRef;
 import se.citerus.dddsample.domain.model.handling.HandlingEvent;
 import se.citerus.dddsample.interfaces.handling.HandlingEventRegistrationAttempt;
 

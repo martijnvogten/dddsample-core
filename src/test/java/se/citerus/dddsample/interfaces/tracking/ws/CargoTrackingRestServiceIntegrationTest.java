@@ -25,7 +25,7 @@ import static org.assertj.core.api.Assertions.fail;
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(classes = Application.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class CargoTrackingRestServiceIntegrationTest {
-
+  
     @LocalServerPort
     private int port;
 
@@ -45,7 +45,7 @@ public class CargoTrackingRestServiceIntegrationTest {
         RequestEntity<Void> request = RequestEntity.get(uri).build();
 
         ResponseEntity<String> response = restTemplate.exchange(request, String.class);
-
+        
         assertThat(response.getStatusCode().value()).isEqualTo(200);
         String expected = StreamUtils.copyToString(getClass().getResourceAsStream("/sampleCargoTrackingResponse.json"), StandardCharsets.UTF_8);
         assertThat(response.getHeaders().get("Content-Type")).containsExactly("application/json");

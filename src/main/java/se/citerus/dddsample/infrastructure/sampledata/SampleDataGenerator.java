@@ -28,6 +28,8 @@ import org.springframework.transaction.support.TransactionCallbackWithoutResult;
 import org.springframework.transaction.support.TransactionTemplate;
 
 import jakarta.annotation.PostConstruct;
+import nl.pojoquery.DB;
+import nl.pojoquery.SqlExpression;
 import se.citerus.dddsample.config.ResetDatabaseBean;
 import se.citerus.dddsample.domain.model.cargo.Cargo;
 import se.citerus.dddsample.domain.model.cargo.CargoRepository;
@@ -85,8 +87,9 @@ public class SampleDataGenerator  {
     @SuppressWarnings("unused")
     @Autowired
     private ResetDatabaseBean resetDatabase;
-
+    
     public void loadHibernateData(TransactionTemplate tt, final HandlingEventFactory handlingEventFactory) {
+        resetDatabase.truncateDatabase();
         log.info("*** Loading Hibernate data ***");
         tt.execute(new TransactionCallbackWithoutResult() {
             @Override
@@ -95,7 +98,7 @@ public class SampleDataGenerator  {
                 for (Location location : SampleLocations.getAll()) {
                     locationRepository.store(location);
                 }
-
+                
                 voyageRepository.store(HONGKONG_TO_NEW_YORK);
                 voyageRepository.store(NEW_YORK_TO_DALLAS);
                 voyageRepository.store(DALLAS_TO_HELSINKI);

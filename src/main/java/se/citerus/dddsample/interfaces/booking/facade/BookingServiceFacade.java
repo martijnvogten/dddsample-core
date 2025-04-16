@@ -1,6 +1,7 @@
 package se.citerus.dddsample.interfaces.booking.facade;
 
 import se.citerus.dddsample.interfaces.booking.facade.dto.CargoRoutingDTO;
+import se.citerus.dddsample.interfaces.booking.facade.dto.CargoSummaryDTO;
 import se.citerus.dddsample.interfaces.booking.facade.dto.LocationDTO;
 import se.citerus.dddsample.interfaces.booking.facade.dto.RouteCandidateDTO;
 
@@ -26,6 +27,6 @@ public interface BookingServiceFacade {
 
   List<LocationDTO> listShippingLocations() throws RemoteException;
 
-  List<CargoRoutingDTO> listAllCargos() throws RemoteException;
+  List<CargoSummaryDTO> listAllCargos() throws RemoteException;
 
 }

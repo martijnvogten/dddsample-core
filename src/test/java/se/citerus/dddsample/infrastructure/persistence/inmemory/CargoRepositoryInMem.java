@@ -1,17 +1,24 @@
 package se.citerus.dddsample.infrastructure.persistence.inmemory;
 
+import static se.citerus.dddsample.infrastructure.sampledata.SampleLocations.HELSINKI;
+import static se.citerus.dddsample.infrastructure.sampledata.SampleLocations.MELBOURNE;
+import static se.citerus.dddsample.infrastructure.sampledata.SampleLocations.STOCKHOLM;
+
+import java.time.Instant;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+
 import se.citerus.dddsample.domain.model.cargo.Cargo;
 import se.citerus.dddsample.domain.model.cargo.CargoRepository;
+import se.citerus.dddsample.domain.model.cargo.CargoSummary;
 import se.citerus.dddsample.domain.model.cargo.RouteSpecification;
 import se.citerus.dddsample.domain.model.cargo.TrackingId;
 import se.citerus.dddsample.domain.model.handling.HandlingEventRepository;
 import se.citerus.dddsample.domain.model.handling.HandlingHistory;
 import se.citerus.dddsample.domain.model.location.Location;
-
-import static se.citerus.dddsample.infrastructure.sampledata.SampleLocations.*;
-
-import java.time.Instant;
-import java.util.*;
 
 /**
  * CargoRepositoryInMem implement the CargoRepository interface but is a test
@@ -48,8 +55,8 @@ public class CargoRepositoryInMem implements CargoRepository {
         );
     }
 
-    public List<Cargo> getAll() {
-        return new ArrayList<>(cargoDb.values());
+    public List<CargoSummary> getAll() {
+        return new ArrayList<CargoSummary>(cargoDb.values());
     }
 
     public void init() throws Exception {

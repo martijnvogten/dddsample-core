@@ -1,10 +1,18 @@
 package se.citerus.dddsample.infrastructure.sampledata;
 
-import se.citerus.dddsample.domain.model.location.Location;
-import se.citerus.dddsample.domain.model.voyage.CarrierMovement;
-import se.citerus.dddsample.domain.model.voyage.Schedule;
-import se.citerus.dddsample.domain.model.voyage.Voyage;
-import se.citerus.dddsample.domain.model.voyage.VoyageNumber;
+import static se.citerus.dddsample.application.util.DateUtils.toDate;
+import static se.citerus.dddsample.infrastructure.sampledata.SampleLocations.CHICAGO;
+import static se.citerus.dddsample.infrastructure.sampledata.SampleLocations.DALLAS;
+import static se.citerus.dddsample.infrastructure.sampledata.SampleLocations.HAMBURG;
+import static se.citerus.dddsample.infrastructure.sampledata.SampleLocations.HANGZHOU;
+import static se.citerus.dddsample.infrastructure.sampledata.SampleLocations.HELSINKI;
+import static se.citerus.dddsample.infrastructure.sampledata.SampleLocations.HONGKONG;
+import static se.citerus.dddsample.infrastructure.sampledata.SampleLocations.MELBOURNE;
+import static se.citerus.dddsample.infrastructure.sampledata.SampleLocations.NEWYORK;
+import static se.citerus.dddsample.infrastructure.sampledata.SampleLocations.ROTTERDAM;
+import static se.citerus.dddsample.infrastructure.sampledata.SampleLocations.SHANGHAI;
+import static se.citerus.dddsample.infrastructure.sampledata.SampleLocations.STOCKHOLM;
+import static se.citerus.dddsample.infrastructure.sampledata.SampleLocations.TOKYO;
 
 import java.lang.reflect.Field;
 import java.time.Instant;
@@ -13,8 +21,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static se.citerus.dddsample.application.util.DateUtils.toDate;
-import static se.citerus.dddsample.infrastructure.sampledata.SampleLocations.*;
+import se.citerus.dddsample.domain.model.location.Location;
+import se.citerus.dddsample.domain.model.voyage.CarrierMovement;
+import se.citerus.dddsample.domain.model.voyage.Schedule;
+import se.citerus.dddsample.domain.model.voyage.Voyage;
+import se.citerus.dddsample.domain.model.voyage.VoyageNumber;
 
 /**
  * Sample carrier movements, for test purposes.
@@ -62,7 +73,7 @@ public class SampleVoyages {
      * <p>
      * Hongkong - Hangzou - Tokyo - Melbourne - New York
      */
-    public static final Voyage HONGKONG_TO_NEW_YORK =
+    public static final Voyage HONGKONG_TO_NEW_YORK = 
             new Voyage.Builder(new VoyageNumber("0100S"), HONGKONG).
                     addMovement(HANGZHOU, toDate("2008-10-01", "12:00"), toDate("2008-10-03", "14:30")).
                     addMovement(TOKYO, toDate("2008-10-03", "21:00"), toDate("2008-10-06", "06:15")).
@@ -138,5 +149,16 @@ public class SampleVoyages {
     public static Voyage lookup(VoyageNumber voyageNumber) {
         return ALL.get(voyageNumber);
     }
-
+    
+    public static void resetIds() {
+      try {
+        Field idField = Voyage.class.getDeclaredField("id");
+        idField.setAccessible(true);
+        for (Voyage location : ALL.values()) {
+          idField.set(location, null);
+        }
+      } catch (Exception e) {
+        throw new RuntimeException(e);
+      }
+    }
 }

@@ -1,8 +1,14 @@
 package se.citerus.dddsample.interfaces.booking.facade.internal;
 
+import java.rmi.RemoteException;
+import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
+
 import se.citerus.dddsample.application.BookingService;
 import se.citerus.dddsample.domain.model.cargo.Cargo;
 import se.citerus.dddsample.domain.model.cargo.CargoRepository;
+import se.citerus.dddsample.domain.model.cargo.CargoSummary;
 import se.citerus.dddsample.domain.model.cargo.Itinerary;
 import se.citerus.dddsample.domain.model.cargo.TrackingId;
 import se.citerus.dddsample.domain.model.location.Location;
@@ -11,16 +17,13 @@ import se.citerus.dddsample.domain.model.location.UnLocode;
 import se.citerus.dddsample.domain.model.voyage.VoyageRepository;
 import se.citerus.dddsample.interfaces.booking.facade.BookingServiceFacade;
 import se.citerus.dddsample.interfaces.booking.facade.dto.CargoRoutingDTO;
+import se.citerus.dddsample.interfaces.booking.facade.dto.CargoSummaryDTO;
 import se.citerus.dddsample.interfaces.booking.facade.dto.LocationDTO;
 import se.citerus.dddsample.interfaces.booking.facade.dto.RouteCandidateDTO;
 import se.citerus.dddsample.interfaces.booking.facade.internal.assembler.CargoRoutingDTOAssembler;
+import se.citerus.dddsample.interfaces.booking.facade.internal.assembler.CargoSummaryDTOAssembler;
 import se.citerus.dddsample.interfaces.booking.facade.internal.assembler.ItineraryCandidateDTOAssembler;
 import se.citerus.dddsample.interfaces.booking.facade.internal.assembler.LocationDTOAssembler;
-
-import java.rmi.RemoteException;
-import java.time.Instant;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * This implementation has additional support from the infrastructure, for exposing as an RMI
@@ -80,11 +83,11 @@ public class BookingServiceFacadeImpl implements BookingServiceFacade {
   }
 
   @Override
-  public List<CargoRoutingDTO> listAllCargos() {
-    final List<Cargo> cargoList = cargoRepository.getAll();
-    final List<CargoRoutingDTO> dtoList = new ArrayList<CargoRoutingDTO>(cargoList.size());
-    final CargoRoutingDTOAssembler assembler = new CargoRoutingDTOAssembler();
-    for (Cargo cargo : cargoList) {
+  public List<CargoSummaryDTO> listAllCargos() {
+    final List<CargoSummary> cargoList = cargoRepository.getAll();
+    final List<CargoSummaryDTO> dtoList = new ArrayList<>(cargoList.size());
+    final CargoSummaryDTOAssembler assembler = new CargoSummaryDTOAssembler();
+    for (CargoSummary cargo : cargoList) {
       dtoList.add(assembler.toDTO(cargo));
     }
     return dtoList;

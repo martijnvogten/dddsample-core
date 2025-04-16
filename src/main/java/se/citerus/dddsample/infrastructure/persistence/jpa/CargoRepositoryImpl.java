@@ -10,6 +10,7 @@ import nl.pojoquery.PojoQuery;
 import nl.pojoquery.SqlExpression;
 import se.citerus.dddsample.domain.model.cargo.Cargo;
 import se.citerus.dddsample.domain.model.cargo.CargoRepository;
+import se.citerus.dddsample.domain.model.cargo.CargoSummary;
 import se.citerus.dddsample.domain.model.cargo.Leg;
 import se.citerus.dddsample.domain.model.cargo.TrackingId;
 
@@ -27,8 +28,8 @@ public class CargoRepositoryImpl implements CargoRepository {
   }
 
   @Override
-  public List<Cargo> getAll() {
-    return db.query(Cargo.class).execute();
+  public List<CargoSummary> getAll() {
+    return db.query(CargoSummary.class).execute();
   }
 
   @Override

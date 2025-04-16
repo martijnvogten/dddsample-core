@@ -26,6 +26,7 @@ import se.citerus.dddsample.infrastructure.sampledata.SampleLocations;
 
 import java.net.URI;
 import java.util.Collections;
+import java.util.Locale;
 import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -35,6 +36,10 @@ import static org.assertj.core.api.Assertions.fail;
 @SpringBootTest(classes = Application.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 public class HandlingReportIntegrationTest {
+  
+    static {
+        Locale.setDefault(Locale.US);
+    }
 
     @LocalServerPort
     private int port;

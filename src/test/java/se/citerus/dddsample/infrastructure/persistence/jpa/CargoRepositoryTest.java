@@ -170,7 +170,7 @@ public class CargoRepositoryTest {
 
     @Test
     public void testFindAll() {
-        List<Cargo> all = cargoRepository.getAll();
+        List<CargoSummary> all = cargoRepository.getAll();
         assertThat(all).isNotNull();
         assertThat(all).hasSize(2);
     }

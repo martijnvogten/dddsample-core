@@ -18,7 +18,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import nl.pojoquery.annotations.FieldName;
 import nl.pojoquery.annotations.Link;
-import se.citerus.dddsample.domain.model.cargo.Cargo.CargoRef;
+import se.citerus.dddsample.domain.model.cargo.CargoSummary.CargoRef;
 import se.citerus.dddsample.domain.model.location.Location;
 import se.citerus.dddsample.domain.model.voyage.Voyage;
 import se.citerus.dddsample.domain.model.voyage.Voyage.VoyageRef;
