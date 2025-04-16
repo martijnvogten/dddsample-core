@@ -160,7 +160,7 @@ public class CargoLifecycleScenarioTest {
     );
 
     // Check current state - should be ok
-    assertThat(cargo.delivery().currentVoyage()).isEqualTo(v100);
+    assertThat(cargo.delivery().currentVoyage().voyageNumber()).isEqualTo(v100.voyageNumber());
     assertThat(cargo.delivery().lastKnownLocation()).isEqualTo(HONGKONG);
     assertThat(cargo.delivery().transportStatus()).isEqualTo(ONBOARD_CARRIER);
     assertThat(cargo.delivery().isMisdirected()).isFalse();
@@ -191,7 +191,7 @@ public class CargoLifecycleScenarioTest {
     );
 
     // Check current state - cargo is misdirected!
-    assertThat(cargo.delivery().currentVoyage()).isEqualTo(NONE);
+    assertThat(cargo.delivery().currentVoyage().voyageNumber()).isEqualTo(NONE.voyageNumber());
     assertThat(cargo.delivery().lastKnownLocation()).isEqualTo(TOKYO);
     assertThat(cargo.delivery().transportStatus()).isEqualTo(IN_PORT);
     assertThat(cargo.delivery().isMisdirected()).isTrue();
@@ -232,7 +232,7 @@ public class CargoLifecycleScenarioTest {
     );
 
     // Check current state - should be ok
-    assertThat(cargo.delivery().currentVoyage()).isEqualTo(v300);
+    assertThat(cargo.delivery().currentVoyage().voyageNumber()).isEqualTo(v300.voyageNumber());
     assertThat(cargo.delivery().lastKnownLocation()).isEqualTo(TOKYO);
     assertThat(cargo.delivery().transportStatus()).isEqualTo(ONBOARD_CARRIER);
     assertThat(cargo.delivery().isMisdirected()).isFalse();
@@ -244,7 +244,7 @@ public class CargoLifecycleScenarioTest {
     );
 
     // Check current state - should be ok
-    assertThat(cargo.delivery().currentVoyage()).isEqualTo(NONE);
+    assertThat(cargo.delivery().currentVoyage().voyageNumber()).isEqualTo(NONE.voyageNumber());
     assertThat(cargo.delivery().lastKnownLocation()).isEqualTo(HAMBURG);
     assertThat(cargo.delivery().transportStatus()).isEqualTo(IN_PORT);
     assertThat(cargo.delivery().isMisdirected()).isFalse();
@@ -257,7 +257,7 @@ public class CargoLifecycleScenarioTest {
     );
 
     // Check current state - should be ok
-    assertThat(cargo.delivery().currentVoyage()).isEqualTo(v400);
+    assertThat(cargo.delivery().currentVoyage().voyageNumber()).isEqualTo(v400.voyageNumber());
     assertThat(cargo.delivery().lastKnownLocation()).isEqualTo(HAMBURG);
     assertThat(cargo.delivery().transportStatus()).isEqualTo(ONBOARD_CARRIER);
     assertThat(cargo.delivery().isMisdirected()).isFalse();
@@ -270,7 +270,7 @@ public class CargoLifecycleScenarioTest {
     );
 
     // Check current state - should be ok
-    assertThat(cargo.delivery().currentVoyage()).isEqualTo(NONE);
+    assertThat(cargo.delivery().currentVoyage().voyageNumber()).isEqualTo(NONE.voyageNumber());
     assertThat(cargo.delivery().lastKnownLocation()).isEqualTo(STOCKHOLM);
     assertThat(cargo.delivery().transportStatus()).isEqualTo(IN_PORT);
     assertThat(cargo.delivery().isMisdirected()).isFalse();
@@ -282,7 +282,7 @@ public class CargoLifecycleScenarioTest {
     );
 
     // Check current state - should be ok
-    assertThat(cargo.delivery().currentVoyage()).isEqualTo(NONE);
+    assertThat(cargo.delivery().currentVoyage().voyageNumber()).isEqualTo(NONE.voyageNumber());
     assertThat(cargo.delivery().lastKnownLocation()).isEqualTo(STOCKHOLM);
     assertThat(cargo.delivery().transportStatus()).isEqualTo(CLAIMED);
     assertThat(cargo.delivery().isMisdirected()).isFalse();
