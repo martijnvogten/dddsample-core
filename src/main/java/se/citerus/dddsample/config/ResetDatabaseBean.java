@@ -57,7 +57,6 @@ public class ResetDatabaseBean {
         HandlingEvent.class
     );
     for (String statement : statements) {
-      System.out.println("DDL: " + statement);
       DB.update(conn, SqlExpression.sql(statement));
     }
     conn.commit();
