@@ -23,11 +23,11 @@ import se.citerus.dddsample.domain.model.location.LocationRepository;
 import se.citerus.dddsample.domain.model.voyage.VoyageRepository;
 import se.citerus.dddsample.domain.service.RoutingService;
 import se.citerus.dddsample.infrastructure.messaging.jms.InfrastructureMessagingJmsConfig;
-import se.citerus.dddsample.infrastructure.persistence.jpa.CargoDatabase;
-import se.citerus.dddsample.infrastructure.persistence.jpa.CargoRepositoryImpl;
-import se.citerus.dddsample.infrastructure.persistence.jpa.HandlingEventRepositoryImpl;
-import se.citerus.dddsample.infrastructure.persistence.jpa.LocationRepositoryImpl;
-import se.citerus.dddsample.infrastructure.persistence.jpa.VoyageRepositoryImpl;
+import se.citerus.dddsample.infrastructure.persistence.pojoquery.CargoDatabase;
+import se.citerus.dddsample.infrastructure.persistence.pojoquery.CargoRepositoryImpl;
+import se.citerus.dddsample.infrastructure.persistence.pojoquery.HandlingEventRepositoryImpl;
+import se.citerus.dddsample.infrastructure.persistence.pojoquery.LocationRepositoryImpl;
+import se.citerus.dddsample.infrastructure.persistence.pojoquery.VoyageRepositoryImpl;
 import se.citerus.dddsample.infrastructure.routing.ExternalRoutingService;
 import se.citerus.dddsample.infrastructure.sampledata.SampleDataGenerator;
 import se.citerus.dddsample.interfaces.InterfacesApplicationContext;
@@ -100,9 +100,9 @@ public class DDDSampleApplicationContext {
 
     @Bean
     public ResetDatabaseBean resetDatabaseBean() {
-      return new ResetDatabaseBean();
+        return new ResetDatabaseBean();
     }
-    
+
     @Bean
     public SampleDataGenerator sampleDataGenerator(CargoRepository cargoRepository,
                                                    VoyageRepository voyageRepository,

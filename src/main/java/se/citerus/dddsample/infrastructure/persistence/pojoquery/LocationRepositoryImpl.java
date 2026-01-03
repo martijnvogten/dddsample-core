@@ -1,4 +1,4 @@
-package se.citerus.dddsample.infrastructure.persistence.jpa;
+package se.citerus.dddsample.infrastructure.persistence.pojoquery;
 
 import java.util.List;
 

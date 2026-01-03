@@ -141,6 +141,13 @@ public class Voyage implements DomainEntity<Voyage> {
   public Long id() {
     return id;
   }
+
+  /**
+   * Creates a copy of this voyage without an ID (for inserting as a new record).
+   */
+  public Voyage copy() {
+    return new Voyage(voyageNumber(), schedule());
+  }
   
   public VoyageRef getRef() {
     return new VoyageRef(id, voyageNumber);

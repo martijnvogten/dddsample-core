@@ -80,6 +80,13 @@ public final class Location implements DomainEntity<Location> {
   }
 
   /**
+   * Creates a copy of this location without an ID (for inserting as a new record).
+   */
+  public Location copy() {
+    return new Location(unlocode, name);
+  }
+
+  /**
    * @param object to compare
    * @return Since this is an entiy this will be true iff UN locodes are equal.
    */

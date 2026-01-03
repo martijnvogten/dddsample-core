@@ -1,4 +1,4 @@
-package se.citerus.dddsample.infrastructure.persistence.jpa;
+package se.citerus.dddsample.infrastructure.persistence.pojoquery;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -13,18 +13,18 @@ import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.jdbc.ReturningWork;
 import org.hibernate.jdbc.Work;
-import org.springframework.beans.factory.annotation.Autowired;
-
-import jakarta.annotation.PostConstruct;
-import jakarta.persistence.EntityManager;
 import org.pojoquery.DB;
 import org.pojoquery.DbContext;
-import org.pojoquery.DbContext.QuoteStyle;
+import org.pojoquery.DbContext.Dialect;
 import org.pojoquery.PojoQuery;
 import org.pojoquery.SqlExpression;
 import org.pojoquery.pipeline.CustomizableQueryBuilder;
 import org.pojoquery.pipeline.QueryBuilder;
 import org.pojoquery.pipeline.SqlQuery;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import jakarta.annotation.PostConstruct;
+import jakarta.persistence.EntityManager;
 
 public class CargoDatabase {
 
@@ -34,15 +34,21 @@ public class CargoDatabase {
   @Autowired
   EntityManager entityManager;
 
+  private static final Map<String, DbContext.Dialect> DIALECTS = Map.of(
+    "jdbc:hsqldb:", Dialect.HSQLDB,
+    "jdbc:mysql:", Dialect.MYSQL,
+    "jdbc:postgresql:", Dialect.POSTGRES);
+
   @PostConstruct
   private void configureDbContext() {
     entityManager.unwrap(Session.class).doWork((conn) -> {
-      boolean isMysql = isMySQL(conn);
-      DbContext dbContext = DbContext.builder()
-          .withQuoteStyle(isMysql ? QuoteStyle.MYSQL : QuoteStyle.ANSI)
-          .quoteObjectNames(false)
-          .build();
-      DbContext.setDefault(dbContext);
+      String url = conn.getMetaData().getURL();
+      DIALECTS.forEach((urlPrefix, dialect) -> {
+        if (url.startsWith(urlPrefix)) {
+          DbContext dbContext = DbContext.forDialect(dialect);
+          DbContext.setDefault(dbContext);
+        }
+      });
     });
   }
 
@@ -99,11 +105,11 @@ public class CargoDatabase {
     }
 
     private T returnSingleRow(List<T> resultList) {
-        if (resultList.size() == 1) {
-          return resultList.get(0);
+      if (resultList.size() == 1) {
+        return resultList.get(0);
       }
       if (resultList.size() > 1) {
-          throw new RuntimeException("More than one result found in findById");
+        throw new RuntimeException("More than one result found in findById");
       }
       return null;
     }
@@ -114,7 +120,32 @@ public class CargoDatabase {
   }
 
   public void insert(Object entity) {
-    doWork(conn -> PojoQuery.insert(conn, entity));
+    Long generatedId = doReturningWork(conn -> PojoQuery.insert(conn, entity));
+    // Set the generated ID back on the entity using reflection
+    if (generatedId != null) {
+      try {
+        java.lang.reflect.Field idField = findIdField(entity.getClass());
+        if (idField != null) {
+          idField.setAccessible(true);
+          idField.set(entity, generatedId);
+        }
+      } catch (Exception e) {
+        throw new RuntimeException("Failed to set generated ID", e);
+      }
+    }
+  }
+
+  private java.lang.reflect.Field findIdField(Class<?> clazz) {
+    for (java.lang.reflect.Field field : clazz.getDeclaredFields()) {
+      if (field.isAnnotationPresent(jakarta.persistence.Id.class)) {
+        return field;
+      }
+    }
+    // Check superclass
+    if (clazz.getSuperclass() != null && clazz.getSuperclass() != Object.class) {
+      return findIdField(clazz.getSuperclass());
+    }
+    return null;
   }
 
   public void insert(String tableName, Map<String, Object> values) {
@@ -129,16 +160,7 @@ public class CargoDatabase {
     doWork(conn -> DB.update(conn, sql));
   }
 
-  private static boolean isMySQL(Connection conn) {
-    try {
-      return conn.getMetaData().getURL().startsWith("jdbc:mysql:");
-    } catch (Exception e) {
-      throw new RuntimeException(e);
-    }
-  }
-
   public boolean isMySQL() {
-    return doReturningWork(conn -> isMySQL(conn));
+    return DbContext.getDefault().getDialect() == Dialect.MYSQL;
   }
-
 }

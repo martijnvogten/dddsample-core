@@ -13,6 +13,8 @@ parseFailureDirectory: /tmp/failed
 brokerUrl: "vm://localhost?broker.persistent=false&broker.useJmx=false"
 
 spring:
+    jpa:
+        open-in-view: false
     dataSource:
         url: jdbc:hsqldb:mem:dddsample
         username: sa
