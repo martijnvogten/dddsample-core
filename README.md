@@ -1,7 +1,6 @@
 # DDDSample Cargo System PojoQuery Proof of concept
 
-This is a working fork of the Cargo System sample App by [Swedish software consulting company Citerus](https://www.citerus.se/) running on PojoQuery instead of Hibernate/JPA, with minimal changes to the original source code.
-Note that JPA is still a part of this project as PojoQuery uses the database connections configured in Spring.
+This is a working fork of the Cargo System sample App by [Swedish software consulting company Citerus](https://www.citerus.se/) running on [PojoQuery](https://pojoquery.org) instead of Hibernate/JPA, with minimal changes to the original source code.
 
 Below is the original readme.
 
