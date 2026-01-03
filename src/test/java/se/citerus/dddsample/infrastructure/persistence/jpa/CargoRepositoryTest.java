@@ -21,6 +21,9 @@ import se.citerus.dddsample.domain.model.location.UnLocode;
 import se.citerus.dddsample.domain.model.voyage.Voyage;
 import se.citerus.dddsample.domain.model.voyage.VoyageNumber;
 import se.citerus.dddsample.domain.model.voyage.VoyageRepository;
+import se.citerus.dddsample.infrastructure.persistence.pojoquery.HandlingEventRepositoryImpl;
+import se.citerus.dddsample.infrastructure.persistence.pojoquery.LocationRepositoryImpl;
+import se.citerus.dddsample.infrastructure.persistence.pojoquery.VoyageRepositoryImpl;
 
 import java.io.IOException;
 import java.nio.file.Files;
