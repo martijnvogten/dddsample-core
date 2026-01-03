@@ -23,8 +23,8 @@ import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import nl.pojoquery.annotations.FieldName;
-import nl.pojoquery.annotations.Link;
+import org.pojoquery.annotations.FieldName;
+import org.pojoquery.annotations.Link;
 import se.citerus.dddsample.domain.model.handling.HandlingEvent;
 import se.citerus.dddsample.domain.model.handling.HandlingHistory;
 import se.citerus.dddsample.domain.model.location.Location;
@@ -59,7 +59,7 @@ public class Delivery implements ValueObject<Delivery> {
   @Column(name = "routing_status")
   private RoutingStatus routingStatus;
 
-  @nl.pojoquery.annotations.Embedded(prefix = "")
+  @org.pojoquery.annotations.Embedded(prefix = "")
   @Embedded
   private HandlingActivity nextExpectedActivity;
 

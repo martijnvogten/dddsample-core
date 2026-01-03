@@ -14,8 +14,8 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
-import nl.pojoquery.annotations.FieldName;
-import nl.pojoquery.annotations.Link;
+import org.pojoquery.annotations.FieldName;
+import org.pojoquery.annotations.Link;
 import se.citerus.dddsample.domain.model.location.Location;
 import se.citerus.dddsample.domain.shared.DomainEntity;
 
@@ -24,12 +24,12 @@ import se.citerus.dddsample.domain.shared.DomainEntity;
  */
 // @Entity(name = "Voyage")
 @Table(name = "Voyage")
-@nl.pojoquery.annotations.Table("voyage")
+@org.pojoquery.annotations.Table("voyage")
 public class Voyage implements DomainEntity<Voyage> {
   
-  @nl.pojoquery.annotations.Table("voyage")
+  @org.pojoquery.annotations.Table("voyage")
   public static class VoyageRef {
-    @nl.pojoquery.annotations.Id
+    @org.pojoquery.annotations.Id
     private Long id;
     
     @FieldName("voyage_number")
@@ -73,7 +73,7 @@ public class Voyage implements DomainEntity<Voyage> {
     }
   }
 
-  @nl.pojoquery.annotations.Id
+  @org.pojoquery.annotations.Id
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
   private Long id;

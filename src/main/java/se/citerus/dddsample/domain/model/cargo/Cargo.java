@@ -16,8 +16,8 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import nl.pojoquery.annotations.FieldName;
-import nl.pojoquery.annotations.Link;
+import org.pojoquery.annotations.FieldName;
+import org.pojoquery.annotations.Link;
 import se.citerus.dddsample.domain.model.handling.HandlingHistory;
 import se.citerus.dddsample.domain.model.location.Location;
 import se.citerus.dddsample.domain.shared.DomainEntity;
@@ -60,13 +60,13 @@ import se.citerus.dddsample.domain.shared.DomainEntity;
  */
 // @Entity(name = "Cargo")
 @Table(name = "Cargo")
-@nl.pojoquery.annotations.Table("cargo")
+@org.pojoquery.annotations.Table("cargo")
 public class Cargo implements DomainEntity<Cargo> {
   
   
-  @nl.pojoquery.annotations.Table("cargo")
+  @org.pojoquery.annotations.Table("cargo")
   public static class CargoRef {
-    @nl.pojoquery.annotations.Id
+    @org.pojoquery.annotations.Id
     private Long id;
     
     @FieldName("tracking_id")
@@ -106,7 +106,7 @@ public class Cargo implements DomainEntity<Cargo> {
     }
   }
 
-  @nl.pojoquery.annotations.Id
+  @org.pojoquery.annotations.Id
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
   private Long id;
@@ -120,7 +120,7 @@ public class Cargo implements DomainEntity<Cargo> {
   @JoinColumn(name = "origin_id")
   private Location origin;
 
-  @nl.pojoquery.annotations.Embedded(prefix="")
+  @org.pojoquery.annotations.Embedded(prefix="")
   @Embedded
   private RouteSpecification routeSpecification;
 
@@ -129,7 +129,7 @@ public class Cargo implements DomainEntity<Cargo> {
   @JoinColumn(name = "cargo_id")
   private List<Leg> itinerary; // TODO figure out if we can map an Itinerary object instead
 
-  @nl.pojoquery.annotations.Embedded(prefix="")
+  @org.pojoquery.annotations.Embedded(prefix="")
   @Embedded
   private Delivery delivery;
 

@@ -5,8 +5,8 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Indexed;
 
-import nl.pojoquery.PojoQuery;
-import nl.pojoquery.SqlExpression;
+import org.pojoquery.PojoQuery;
+import org.pojoquery.SqlExpression;
 import se.citerus.dddsample.domain.model.voyage.CarrierMovement;
 import se.citerus.dddsample.domain.model.voyage.Voyage;
 import se.citerus.dddsample.domain.model.voyage.VoyageNumber;

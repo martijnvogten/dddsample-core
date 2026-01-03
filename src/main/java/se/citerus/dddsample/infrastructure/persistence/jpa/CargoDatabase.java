@@ -17,14 +17,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import jakarta.annotation.PostConstruct;
 import jakarta.persistence.EntityManager;
-import nl.pojoquery.DB;
-import nl.pojoquery.DbContext;
-import nl.pojoquery.DbContext.QuoteStyle;
-import nl.pojoquery.PojoQuery;
-import nl.pojoquery.SqlExpression;
-import nl.pojoquery.pipeline.CustomizableQueryBuilder;
-import nl.pojoquery.pipeline.QueryBuilder;
-import nl.pojoquery.pipeline.SqlQuery;
+import org.pojoquery.DB;
+import org.pojoquery.DbContext;
+import org.pojoquery.DbContext.QuoteStyle;
+import org.pojoquery.PojoQuery;
+import org.pojoquery.SqlExpression;
+import org.pojoquery.pipeline.CustomizableQueryBuilder;
+import org.pojoquery.pipeline.QueryBuilder;
+import org.pojoquery.pipeline.SqlQuery;
 
 public class CargoDatabase {
 
@@ -37,10 +37,12 @@ public class CargoDatabase {
   @PostConstruct
   private void configureDbContext() {
     entityManager.unwrap(Session.class).doWork((conn) -> {
-      DbContext pojoqueryConfig = DbContext.getDefault();
       boolean isMysql = isMySQL(conn);
-      pojoqueryConfig.setQuoteStyle(isMysql ? QuoteStyle.MYSQL : QuoteStyle.ANSI);
-      pojoqueryConfig.setQuoteObjectNames(false);
+      DbContext dbContext = DbContext.builder()
+          .withQuoteStyle(isMysql ? QuoteStyle.MYSQL : QuoteStyle.ANSI)
+          .quoteObjectNames(false)
+          .build();
+      DbContext.setDefault(dbContext);
     });
   }
 

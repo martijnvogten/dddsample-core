@@ -5,9 +5,9 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
-import nl.pojoquery.DB;
-import nl.pojoquery.PojoQuery;
-import nl.pojoquery.SqlExpression;
+import org.pojoquery.DB;
+import org.pojoquery.PojoQuery;
+import org.pojoquery.SqlExpression;
 import se.citerus.dddsample.domain.model.cargo.Cargo;
 import se.citerus.dddsample.domain.model.cargo.CargoRepository;
 import se.citerus.dddsample.domain.model.cargo.Leg;

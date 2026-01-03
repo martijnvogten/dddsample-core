@@ -13,8 +13,8 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import nl.pojoquery.annotations.FieldName;
-import nl.pojoquery.annotations.Link;
+import org.pojoquery.annotations.FieldName;
+import org.pojoquery.annotations.Link;
 import se.citerus.dddsample.domain.model.location.Location;
 import se.citerus.dddsample.domain.model.voyage.Voyage;
 import se.citerus.dddsample.domain.model.voyage.Voyage.VoyageRef;
@@ -25,10 +25,10 @@ import se.citerus.dddsample.domain.shared.ValueObject;
  */
 // @Entity(name = "Leg")
 @Table(name = "Leg")
-@nl.pojoquery.annotations.Table("leg")
+@org.pojoquery.annotations.Table("leg")
 public class Leg implements ValueObject<Leg> {
 
-  @nl.pojoquery.annotations.Id
+  @org.pojoquery.annotations.Id
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
   private Long id;

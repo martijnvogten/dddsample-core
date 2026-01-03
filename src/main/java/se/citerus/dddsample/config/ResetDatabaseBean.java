@@ -16,8 +16,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import jakarta.annotation.PostConstruct;
 import jakarta.persistence.EntityManager;
-import nl.pojoquery.DB;
-import nl.pojoquery.SqlExpression;
+import org.pojoquery.DB;
+import org.pojoquery.SqlExpression;
 import se.citerus.dddsample.infrastructure.sampledata.SampleLocations;
 import se.citerus.dddsample.infrastructure.sampledata.SampleVoyages;
 

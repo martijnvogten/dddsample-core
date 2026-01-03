@@ -28,8 +28,8 @@ import org.springframework.transaction.support.TransactionCallbackWithoutResult;
 import org.springframework.transaction.support.TransactionTemplate;
 
 import jakarta.annotation.PostConstruct;
-import nl.pojoquery.DB;
-import nl.pojoquery.SqlExpression;
+import org.pojoquery.DB;
+import org.pojoquery.SqlExpression;
 import se.citerus.dddsample.config.ResetDatabaseBean;
 import se.citerus.dddsample.domain.model.cargo.Cargo;
 import se.citerus.dddsample.domain.model.cargo.CargoRepository;

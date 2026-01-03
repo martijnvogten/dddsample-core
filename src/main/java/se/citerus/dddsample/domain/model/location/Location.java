@@ -13,10 +13,10 @@ import java.util.Objects;
  */
 // @Entity(name = "Location")
 @Table(name = "Location")
-@nl.pojoquery.annotations.Table(value="location")
+@org.pojoquery.annotations.Table(value="location")
 public final class Location implements DomainEntity<Location> {
 
-  @nl.pojoquery.annotations.Id
+  @org.pojoquery.annotations.Id
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
   private Long id;

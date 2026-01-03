@@ -16,8 +16,8 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import nl.pojoquery.annotations.FieldName;
-import nl.pojoquery.annotations.Link;
+import org.pojoquery.annotations.FieldName;
+import org.pojoquery.annotations.Link;
 import se.citerus.dddsample.domain.model.cargo.Cargo.CargoRef;
 import se.citerus.dddsample.domain.model.location.Location;
 import se.citerus.dddsample.domain.model.voyage.Voyage;
@@ -43,10 +43,10 @@ import se.citerus.dddsample.domain.shared.ValueObject;
  */
 // @Entity(name = "HandlingEvent")
 @Table(name = "HandlingEvent")
-@nl.pojoquery.annotations.Table("handling_event")
+@org.pojoquery.annotations.Table("handling_event")
 public final class HandlingEvent implements DomainEvent<HandlingEvent> {
 
-  @nl.pojoquery.annotations.Id
+  @org.pojoquery.annotations.Id
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
   private Long id;
