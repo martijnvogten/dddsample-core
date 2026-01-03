@@ -7,3 +7,4 @@ target
 /.gradle/
 /.classpath
 /.project
+.DS_Store

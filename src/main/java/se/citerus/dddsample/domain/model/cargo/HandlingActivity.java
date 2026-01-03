@@ -15,7 +15,6 @@ import nl.pojoquery.annotations.FieldName;
 import nl.pojoquery.annotations.Link;
 import se.citerus.dddsample.domain.model.handling.HandlingEvent;
 import se.citerus.dddsample.domain.model.location.Location;
-import se.citerus.dddsample.domain.model.voyage.Voyage;
 import se.citerus.dddsample.domain.model.voyage.Voyage.VoyageRef;
 import se.citerus.dddsample.domain.shared.ValueObject;
 
