@@ -1,13 +1,11 @@
 package se.citerus.dddsample.domain.model.cargo;
 
-import jakarta.persistence.*;
 import java.util.List;
 import java.util.Objects;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
-import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -16,8 +14,6 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import org.pojoquery.annotations.FieldName;
-import org.pojoquery.annotations.Link;
 import se.citerus.dddsample.domain.model.handling.HandlingHistory;
 import se.citerus.dddsample.domain.model.location.Location;
 import se.citerus.dddsample.domain.shared.DomainEntity;
@@ -59,17 +55,15 @@ import se.citerus.dddsample.domain.shared.DomainEntity;
  *
  */
 // @Entity(name = "Cargo")
-@Table(name = "Cargo")
-@org.pojoquery.annotations.Table("cargo")
+@Table(name = "cargo")
 public class Cargo implements DomainEntity<Cargo> {
   
-  
-  @org.pojoquery.annotations.Table("cargo")
+  @Table(name = "cargo")
   public static class CargoRef {
-    @org.pojoquery.annotations.Id
+    @Id
     private Long id;
-    
-    @FieldName("tracking_id")
+  
+    @Column(name = "tracking_id")
     private String trackingId;
     
     public CargoRef(Long id, String trackingId) {
@@ -106,30 +100,24 @@ public class Cargo implements DomainEntity<Cargo> {
     }
   }
 
-  @org.pojoquery.annotations.Id
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
   private Long id;
 
-  @FieldName("tracking_id")
   @Column(name = "tracking_id", unique = true)
   private String trackingId;
 
-  @Link(linkfield = "origin_id")
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "origin_id")
   private Location origin;
 
-  @org.pojoquery.annotations.Embedded(prefix="")
   @Embedded
   private RouteSpecification routeSpecification;
-
-  @Link(linkfield = "cargo_id")
+  
   @OneToMany(cascade = CascadeType.ALL)
   @JoinColumn(name = "cargo_id")
   private List<Leg> itinerary; // TODO figure out if we can map an Itinerary object instead
-
-  @org.pojoquery.annotations.Embedded(prefix="")
+  
   @Embedded
   private Delivery delivery;
 

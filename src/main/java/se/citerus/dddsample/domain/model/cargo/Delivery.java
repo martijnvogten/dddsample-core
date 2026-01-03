@@ -23,8 +23,6 @@ import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import org.pojoquery.annotations.FieldName;
-import org.pojoquery.annotations.Link;
 import se.citerus.dddsample.domain.model.handling.HandlingEvent;
 import se.citerus.dddsample.domain.model.handling.HandlingHistory;
 import se.citerus.dddsample.domain.model.location.Location;
@@ -46,42 +44,31 @@ public class Delivery implements ValueObject<Delivery> {
   @Column
   private Instant eta;
 
-  @FieldName("calculated_at")
   @Column(name = "calculated_at")
   private Instant calculatedAt;
 
-  @FieldName("unloaded_at_dest")
   @Column(name = "unloaded_at_dest")
   private boolean isUnloadedAtDestination;
 
-  @FieldName("routing_status")
   @Enumerated(value = EnumType.STRING)
   @Column(name = "routing_status")
   private RoutingStatus routingStatus;
 
-  @org.pojoquery.annotations.Embedded(prefix = "")
   @Embedded
   private HandlingActivity nextExpectedActivity;
 
-  @FieldName("transport_status")
   @Enumerated(value = EnumType.STRING)
   @Column(name = "transport_status")
   private TransportStatus transportStatus;
 
-  @Link(linkfield = "current_voyage_id")
-  @FieldName("current_voyage_id")
   @ManyToOne
   @JoinColumn(name = "current_voyage_id")
   private VoyageRef currentVoyage;
 
-  @Link(linkfield = "last_known_location_id")
-  @FieldName("last_known_location_id")
   @ManyToOne()
   @JoinColumn(name = "last_known_location_id")
   private Location lastKnownLocation;
 
-  @Link(linkfield = "last_event_id")
-  @FieldName("last_event_id")
   @ManyToOne
   @JoinColumn(name = "last_event_id")
   private HandlingEvent lastEvent;

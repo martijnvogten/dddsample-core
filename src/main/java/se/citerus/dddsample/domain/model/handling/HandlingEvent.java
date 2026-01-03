@@ -16,8 +16,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import org.pojoquery.annotations.FieldName;
-import org.pojoquery.annotations.Link;
 import se.citerus.dddsample.domain.model.cargo.Cargo.CargoRef;
 import se.citerus.dddsample.domain.model.location.Location;
 import se.citerus.dddsample.domain.model.voyage.Voyage;
@@ -42,36 +40,29 @@ import se.citerus.dddsample.domain.shared.ValueObject;
  * All other events must be of {@link Type#RECEIVE}, {@link Type#CLAIM} or {@link Type#CUSTOMS}.
  */
 // @Entity(name = "HandlingEvent")
-@Table(name = "HandlingEvent")
-@org.pojoquery.annotations.Table("handling_event")
+@Table(name = "handling_event")
 public final class HandlingEvent implements DomainEvent<HandlingEvent> {
 
-  @org.pojoquery.annotations.Id
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
   private Long id;
 
-  @Link(linkfield = "voyage_id")
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "voyage_id")
   private VoyageRef voyage;
 
-  @Link(linkfield = "location_id")
   @ManyToOne(fetch = FetchType.EAGER)
   @JoinColumn(name = "location_id")
   private Location location;
 
-  @Link(linkfield = "cargo_id")
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "cargo_id")
   private CargoRef cargo;
 
-  @FieldName("completion_time")
-  @Column
+  @Column(name = "completion_time")
   private Instant completionTime;
 
-  @FieldName("registration_time")
-  @Column
+  @Column(name = "registration_time")
   private Instant registrationTime;
 
   @Column

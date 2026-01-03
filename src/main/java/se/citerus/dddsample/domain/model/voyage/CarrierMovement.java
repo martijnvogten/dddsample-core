@@ -1,8 +1,6 @@
 package se.citerus.dddsample.domain.model.voyage;
 
 import jakarta.persistence.*;
-import org.pojoquery.annotations.FieldName;
-import org.pojoquery.annotations.Link;
 
 import org.apache.commons.lang3.Validate;
 import org.apache.commons.lang3.builder.EqualsBuilder;
@@ -17,30 +15,24 @@ import java.time.Instant;
  * A carrier movement is a vessel voyage from one location to another.
  */
 // @Entity(name = "CarrierMovement")
-@Table(name = "CarrierMovement")
-@org.pojoquery.annotations.Table("carrier_movement")
+@Table(name = "carrier_movement")
 public final class CarrierMovement implements ValueObject<CarrierMovement> {
 
-  @org.pojoquery.annotations.Id
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
   private Long id;
 
-  @Link(linkfield = "arrival_location_id")
   @ManyToOne(fetch = FetchType.EAGER)
   @JoinColumn(name = "arrival_location_id", nullable = false)
   private Location arrivalLocation;
 
-  @Link(linkfield = "departure_location_id")
   @ManyToOne(fetch = FetchType.EAGER)
   @JoinColumn(name = "departure_location_id", nullable = false)
   private Location departureLocation;
 
-  @FieldName("arrival_time")
   @Column(name = "arrival_time", nullable = false)
   private Instant arrivalTime;
 
-  @FieldName("departure_time")
   @Column(name = "departure_time", nullable = false)
   private Instant departureTime;
 

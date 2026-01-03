@@ -11,8 +11,6 @@ import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import org.pojoquery.annotations.FieldName;
-import org.pojoquery.annotations.Link;
 import se.citerus.dddsample.domain.model.handling.HandlingEvent;
 import se.citerus.dddsample.domain.model.location.Location;
 import se.citerus.dddsample.domain.model.voyage.Voyage.VoyageRef;
@@ -29,19 +27,14 @@ public class HandlingActivity implements ValueObject<HandlingActivity> {
 
   // TODO make HandlingActivity a part of HandlingEvent too? There is some overlap. 
 
-  @FieldName("next_expected_handling_event_type")
   @Enumerated(value = EnumType.STRING)
   @Column(name = "next_expected_handling_event_type")
   public HandlingEvent.Type type;
 
-  @Link(linkfield="next_expected_location_id")
-  @FieldName("next_expected_location_id")
   @ManyToOne()
   @JoinColumn(name = "next_expected_location_id")
   public Location location;
 
-  @Link(linkfield="next_expected_voyage_id")
-  @FieldName("next_expected_voyage_id")
   @ManyToOne
   @JoinColumn(name = "next_expected_voyage_id")
   public VoyageRef voyage;

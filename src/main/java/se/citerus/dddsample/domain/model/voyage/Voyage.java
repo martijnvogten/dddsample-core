@@ -14,8 +14,6 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
-import org.pojoquery.annotations.FieldName;
-import org.pojoquery.annotations.Link;
 import se.citerus.dddsample.domain.model.location.Location;
 import se.citerus.dddsample.domain.shared.DomainEntity;
 
@@ -23,16 +21,15 @@ import se.citerus.dddsample.domain.shared.DomainEntity;
  * A Voyage.
  */
 // @Entity(name = "Voyage")
-@Table(name = "Voyage")
-@org.pojoquery.annotations.Table("voyage")
+@Table(name = "voyage")
 public class Voyage implements DomainEntity<Voyage> {
   
-  @org.pojoquery.annotations.Table("voyage")
+  @Table(name = "voyage")
   public static class VoyageRef {
-    @org.pojoquery.annotations.Id
+    @Id
     private Long id;
     
-    @FieldName("voyage_number")
+    @Column(name = "voyage_number")
     private String voyageNumber;
     
     public VoyageRef(Long id, String voyageNumber) {
@@ -73,16 +70,13 @@ public class Voyage implements DomainEntity<Voyage> {
     }
   }
 
-  @org.pojoquery.annotations.Id
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
   private Long id;
 
-  @FieldName("voyage_number")
   @Column(name = "voyage_number", unique = true)
   private String voyageNumber;
 
-  @Link(foreignlinkfield = "voyage_id")
   @OneToMany(cascade = CascadeType.ALL)
   @JoinColumn(name = "voyage_id")
   private List<CarrierMovement> carrierMovements;

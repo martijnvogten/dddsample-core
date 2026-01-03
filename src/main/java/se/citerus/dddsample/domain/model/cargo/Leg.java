@@ -13,8 +13,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import org.pojoquery.annotations.FieldName;
-import org.pojoquery.annotations.Link;
 import se.citerus.dddsample.domain.model.location.Location;
 import se.citerus.dddsample.domain.model.voyage.Voyage;
 import se.citerus.dddsample.domain.model.voyage.Voyage.VoyageRef;
@@ -24,35 +22,28 @@ import se.citerus.dddsample.domain.shared.ValueObject;
  * An itinerary consists of one or more legs.
  */
 // @Entity(name = "Leg")
-@Table(name = "Leg")
-@org.pojoquery.annotations.Table("leg")
+@Table(name = "leg")
 public class Leg implements ValueObject<Leg> {
 
-  @org.pojoquery.annotations.Id
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
   private Long id;
   
-  @Link(linkfield = "voyage_id")
   @ManyToOne
   @JoinColumn(name="voyage_id")
   private VoyageRef voyage;
 
-  @Link(linkfield = "load_location_id")
   @ManyToOne
   @JoinColumn(name = "load_location_id")
   private Location loadLocation;
 
-  @FieldName("load_time")
   @Column(name = "load_time")
   private Instant loadTime;
 
-  @Link(linkfield = "unload_location_id")
   @ManyToOne
   @JoinColumn(name = "unload_location_id")
   private Location unloadLocation;
 
-  @FieldName("unload_time")
   @Column(name = "unload_time")
   private Instant unloadTime;
 

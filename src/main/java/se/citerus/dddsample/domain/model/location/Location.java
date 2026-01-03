@@ -1,9 +1,13 @@
 package se.citerus.dddsample.domain.model.location;
 
-import jakarta.persistence.*;
-import se.citerus.dddsample.domain.shared.DomainEntity;
-
 import java.util.Objects;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import se.citerus.dddsample.domain.shared.DomainEntity;
 
 /**
  * A location is our model is stops on a journey, such as cargo
@@ -12,11 +16,9 @@ import java.util.Objects;
  *
  */
 // @Entity(name = "Location")
-@Table(name = "Location")
-@org.pojoquery.annotations.Table(value="location")
+@Table(name = "location")
 public final class Location implements DomainEntity<Location> {
 
-  @org.pojoquery.annotations.Id
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
   private Long id;
